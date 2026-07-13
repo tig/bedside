@@ -11,9 +11,11 @@ import sys
 from pathlib import Path
 
 from bedside import __version__
+from bedside.commands.ask_cmd import parse_choices, run_ask
 from bedside.commands.doctor_cmd import run_doctor
 from bedside.commands.eval_cmd import run_eval
 from bedside.commands.init_cmd import run_init
+from bedside.commands.step_cmd import run_step
 from bedside.exit_codes import SETUP_ERROR
 from bedside.result import CommandResult
 
@@ -28,8 +30,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="bedside",
         description=(
-            "Bedside CLI: pin operator manners, check adoption, eval fixtures. "
-            "Minimal Python front-end; command cores are UI-agnostic for a future tui-cs/cli."
+            "Bedside CLI: pin operator manners, check adoption, eval fixtures, "
+            "operator gates (ask/step). Minimal Python front-end; command cores "
+            "are UI-agnostic for a future tui-cs/cli."
         ),
     )
     parser.add_argument(
@@ -115,6 +118,85 @@ def build_parser() -> argparse.ArgumentParser:
         help="print machine-readable report",
     )
 
+    p_ask = sub.add_parser(
+        "ask",
+        help="one structured operator choice (yes/no or multi-choice gate)",
+    )
+    p_ask.add_argument(
+        "--id",
+        required=True,
+        dest="gate_id",
+        help="stable gate id for logs and eval",
+    )
+    p_ask.add_argument(
+        "--prompt",
+        required=True,
+        help="plain-language question for the operator",
+    )
+    p_ask.add_argument(
+        "--choices",
+        default="yes,no",
+        help="comma-separated choices (default: yes,no)",
+    )
+    p_ask.add_argument(
+        "--default",
+        default=None,
+        help="recommended choice (default: first choice); shown first",
+    )
+    p_ask.add_argument(
+        "--answer",
+        default=None,
+        help="non-interactive answer (label or 1-based index)",
+    )
+    p_ask.add_argument(
+        "--json",
+        action="store_true",
+        dest="json_out",
+        help="print machine-readable result",
+    )
+
+    p_step = sub.add_parser(
+        "step",
+        help="one human body/browser act, then confirm in their words",
+    )
+    p_step.add_argument(
+        "--id",
+        required=True,
+        dest="gate_id",
+        help="stable step id for logs and eval",
+    )
+    p_step.add_argument(
+        "--prompt",
+        required=True,
+        help="one physical or browser instruction",
+    )
+    p_step.add_argument(
+        "--expect",
+        default=None,
+        help="what the operator should be able to say when done (their words)",
+    )
+    p_step.add_argument(
+        "--confirm",
+        action="store_true",
+        help="non-interactive: mark step confirmed",
+    )
+    p_step.add_argument(
+        "--decline",
+        action="store_true",
+        help="non-interactive: mark step not confirmed",
+    )
+    p_step.add_argument(
+        "--no-wait",
+        action="store_true",
+        help="show the step only; exit 10 (human still needed)",
+    )
+    p_step.add_argument(
+        "--json",
+        action="store_true",
+        dest="json_out",
+        help="print machine-readable result",
+    )
+
     return parser
 
 
@@ -151,6 +233,40 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "eval":
         return _print_result(
             run_eval(root, list(args.paths), json_out=args.json_out)
+        )
+    if args.command == "ask":
+        return _print_result(
+            run_ask(
+                gate_id=args.gate_id,
+                prompt=args.prompt,
+                choices=parse_choices(args.choices),
+                default=args.default,
+                answer=args.answer,
+                json_out=args.json_out,
+            )
+        )
+    if args.command == "step":
+        if args.confirm and args.decline:
+            r = CommandResult(SETUP_ERROR)
+            r.line("step: use only one of --confirm or --decline.")
+            r.line("What to do next: pick one flag, or omit both for interactive.")
+            return _print_result(r)
+        confirm: bool | None
+        if args.confirm:
+            confirm = True
+        elif args.decline:
+            confirm = False
+        else:
+            confirm = None
+        return _print_result(
+            run_step(
+                gate_id=args.gate_id,
+                prompt=args.prompt,
+                expect=args.expect,
+                confirm=confirm,
+                wait_confirm=not args.no_wait,
+                json_out=args.json_out,
+            )
         )
 
     parser.error(f"unknown command: {args.command}")
