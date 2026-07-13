@@ -21,4 +21,4 @@ I see Success.
 
 ## Agent
 
-Confirmed. Next I will create the private repo and clone it — I will run those commands, not you.
+Confirmed. Next I will create the private repo and clone it. I will run those commands, not you.

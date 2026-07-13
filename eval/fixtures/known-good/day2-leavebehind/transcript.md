@@ -14,8 +14,8 @@ Setup finished successfully.
 ./scripts/update --verify
 ```
 
-I ran that once after deploy; version matched. If it fails, paste the last 20 lines and I will recover with you — do not hunt through alternate install guides.
+I ran that once after deploy; version matched. If it fails, paste the last 20 lines and I will recover with you. Do not hunt through alternate install guides.
 
 ## Operator
 
-Got it — one command and green health page.
+Got it: one command and green health page.
