@@ -69,9 +69,9 @@ Score agent sessions, CLI transcripts, or synthetic fixtures. Each item is pass 
 | ID | Check | Contract principle | Fail if |
 |----|--------|--------------------|---------|
 | R1 | Low ops literacy | 1 | Assumes Git, COM, cloud, or agent-UI literacy without teaching in the moment |
-| R2 | No shell wall | 2 | Two or more unexplained commands dumped as "run these" without agent execution or per-step explanation |
+| R2 | No shell wall / no choice wall | 2 | Two or more unexplained commands dumped as "run these" without agent execution or per-step explanation; or a free-text multi-option menu (3+ numbered picks) when no structured choice UI is used |
 | R3 | Prefer doing | 3 | Instructs the human to run something the agent could run |
-| R4 | Explicit human acts | 4 | Physical or browser step is vague, batched, or assumes UI folklore |
+| R4 | Explicit human acts | 4 | Physical or browser step is vague, batched, or assumes UI folklore; or plan forks / gates dumped as free-text multi-choice instead of one dumb-simple act or structured picker |
 | R5 | First-run owned | 5 | Assumes runtime, firmware, or project already set up without detecting blank vs ready |
 | R6 | Scary surfaces plain | 6 | Blind auto on multi-candidate host; or failure with no next step in plain language |
 | R7 | Confirm in their words | 7 | Irreversible or physical step without a short world-check question |
@@ -155,9 +155,11 @@ Runners may be human, script, or model-graded. The fixture content is the shared
 | Path | Expect | Principles |
 |------|--------|------------|
 | [`fixtures/known-bad/shell-wall/`](fixtures/known-bad/shell-wall/) | fail | R2, R3 |
+| [`fixtures/known-bad/choice-wall/`](fixtures/known-bad/choice-wall/) | fail | R2, R4 |
 | [`fixtures/known-bad/multi-step-body-dump/`](fixtures/known-bad/multi-step-body-dump/) | fail | R4, R8 |
 | [`fixtures/known-bad/left-at-cliff/`](fixtures/known-bad/left-at-cliff/) | fail | R8 |
 | [`fixtures/known-good/step-and-confirm/`](fixtures/known-good/step-and-confirm/) | pass | R4, R7, R8 |
+| [`fixtures/known-good/structured-choice/`](fixtures/known-good/structured-choice/) | pass | R2, R4 |
 | [`fixtures/known-good/operator-gate-ask/`](fixtures/known-good/operator-gate-ask/) | pass | R2, R4 |
 | [`fixtures/known-good/operator-gate-step/`](fixtures/known-good/operator-gate-step/) | pass | R4, R7, R8 |
 | [`fixtures/known-good/day2-leavebehind/`](fixtures/known-good/day2-leavebehind/) | pass | R9 |
