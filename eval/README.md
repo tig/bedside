@@ -32,7 +32,35 @@ Optional but recommended:
 
 1. Day-1 rehearsal scorecard (below).
 2. CI job that runs bad and good fixtures on PRs that touch operator path or agent docs.
-3. Domain-specific fixtures under your repo; keep principles pinned here.
+3. Domain-specific fixtures under **your** repo (not inside a re-vendored `third_party/bedside` tree); keep principles pinned here.
+
+### Domain packs (product fixtures)
+
+Recommended layout for silico and kin:
+
+```text
+third_party/bedside/eval/fixtures/   # upstream generic only (re-vendor OK)
+eval/fixtures/                       # product domain pack (survives re-vendor)
+  known-bad/...
+  known-good/...
+```
+
+In `bedside.toml`:
+
+```toml
+fixture_paths = [
+  "third_party/bedside/eval/fixtures",
+  "eval/fixtures",
+]
+```
+
+Then `bedside eval` with no args walks both roots. Explicit multi-root also works:
+
+```bash
+bedside eval third_party/bedside/eval/fixtures eval/fixtures
+```
+
+Do not store the only copy of metal or MCP fixtures under `third_party/bedside/`. Full workflow: [docs/adopting.md](../docs/adopting.md).
 
 ## Rubric (v0)
 
@@ -146,15 +174,21 @@ This repo ships a minimal runner as the `bedside` Python CLI (`bedside eval`).
 pip install -e .
 bedside eval eval/fixtures
 bedside eval eval/fixtures/known-bad/shell-wall
+bedside eval third_party/bedside/eval/fixtures eval/fixtures
 ```
+
+Summary line semantics:
+
+- `failed=R2,R3`: focus principles from `meta.toml` that failed (drive expect).
+- `info=R9`: non-focus failures; informational when expect still matches.
 
 CI sketch:
 
 ```text
 bedside eval eval/fixtures/known-bad   # each expect=fail must score fail
 bedside eval eval/fixtures/known-good  # each expect=pass must score pass
-# or one shot:
-bedside eval eval/fixtures
+# or one shot (all fixture_paths):
+bedside eval
 ```
 
 ## Eval checklist

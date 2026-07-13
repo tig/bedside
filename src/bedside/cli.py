@@ -45,8 +45,15 @@ def build_parser() -> argparse.ArgumentParser:
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p_init = sub.add_parser("init", help="write bedside.toml, domain notes, AGENTS stub")
-    p_init.add_argument("--pin", default="main", help="recorded pin tag or SHA")
+    p_init = sub.add_parser(
+        "init",
+        help="write bedside.toml, domain notes, AGENTS stub; optional vendor-copy",
+    )
+    p_init.add_argument(
+        "--pin",
+        default="main",
+        help="recorded pin tag or SHA (default: main; with --vendor-from, git HEAD if main)",
+    )
     p_init.add_argument(
         "--contract-path",
         default="third_party/bedside/contract",
@@ -59,6 +66,27 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="do not write BEDSIDE.md",
     )
+    p_init.add_argument(
+        "--vendor-from",
+        type=Path,
+        default=None,
+        help="local tig/bedside checkout to copy into --vendor-dest (no submodule)",
+    )
+    p_init.add_argument(
+        "--vendor-dest",
+        default="third_party/bedside",
+        help="destination for vendor-copy (default: third_party/bedside)",
+    )
+    p_init.add_argument(
+        "--no-src",
+        action="store_true",
+        help="with --vendor-from, skip copying src/ (docs/fixtures only)",
+    )
+    p_init.add_argument(
+        "--domain-fixtures",
+        default="eval/fixtures",
+        help="product fixture root outside vendor tree (default: eval/fixtures)",
+    )
 
     p_doctor = sub.add_parser("doctor", help="check Bedside adoption health")
     p_doctor.add_argument(
@@ -67,12 +95,18 @@ def build_parser() -> argparse.ArgumentParser:
         help="do not fail if contract path is missing (soft check)",
     )
 
-    p_eval = sub.add_parser("eval", help="score fixture(s) against rubric R1-R9")
+    p_eval = sub.add_parser(
+        "eval",
+        help="score fixture dir(s) against rubric R1-R9 (multi-root OK)",
+    )
     p_eval.add_argument(
         "paths",
         nargs="*",
         type=Path,
-        help="fixture dir(s) or tree; default: configured or packaged eval/fixtures",
+        help=(
+            "fixture dir(s) or trees; default: fixture_paths from bedside.toml "
+            "(vendored + domain)"
+        ),
     )
     p_eval.add_argument(
         "--json",
@@ -104,6 +138,10 @@ def main(argv: list[str] | None = None) -> int:
                 force=args.force,
                 skip_agents=args.skip_agents,
                 skip_domain_notes=args.skip_domain_notes,
+                vendor_from=args.vendor_from,
+                vendor_dest=args.vendor_dest,
+                include_src=not args.no_src,
+                domain_fixtures=args.domain_fixtures,
             )
         )
     if args.command == "doctor":

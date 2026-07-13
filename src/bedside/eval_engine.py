@@ -28,14 +28,27 @@ class FixtureMeta:
 class ScoreReport:
     fixture_id: str
     expect: str
-    overall_pass: bool  # did the session pass the rubric?
+    overall_pass: bool  # did the session pass the rubric (focus only)?
     principle_pass: dict[str, bool]
     reasons: list[str]
     matched_expect: bool  # overall_pass aligns with expect
+    focus: list[str]
 
     @property
     def ok(self) -> bool:
         return self.matched_expect
+
+    @property
+    def failed_focus(self) -> list[str]:
+        return [k for k in self.focus if not self.principle_pass.get(k, True)]
+
+    @property
+    def info_failed(self) -> list[str]:
+        """Non-focus principles that failed; informational only."""
+        focus_set = set(self.focus)
+        return sorted(
+            k for k, v in self.principle_pass.items() if not v and k not in focus_set
+        )
 
 
 def load_meta(path: Path) -> FixtureMeta:
@@ -290,6 +303,7 @@ def evaluate_fixture_dir(fixture_dir: Path) -> ScoreReport:
         principle_pass=principle_pass,
         reasons=reasons,
         matched_expect=matched,
+        focus=list(focus),
     )
 
 
