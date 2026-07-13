@@ -206,8 +206,11 @@ def main(argv: list[str] | None = None) -> int:
     try:
         args = parser.parse_args(argv)
     except SystemExit as e:
-        code = e.code if isinstance(e.code, int) else SETUP_ERROR
-        return code
+        # argparse: 0 for --help/--version; 2 for usage errors. Agents branch on
+        # 10 vs 30, so map usage errors to SETUP_ERROR (not bare 2).
+        if e.code in (0, None):
+            return 0
+        return SETUP_ERROR
 
     root: Path = args.root
 

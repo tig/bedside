@@ -53,9 +53,9 @@ def run_step(
         # Show-only path still needs an explicit later confirm; exit human-needed.
         r = CommandResult(HUMAN_NEEDED)
         _emit_step(r, gate_id, prompt, expect)
-        r.line("Waiting for confirmation (not requested on this run).")
+        r.line("Confirmation not requested on this run (--no-wait).")
         r.line(
-            f"Record: bedside.step id={gate_id} confirmed=false wait=true"
+            f"Record: bedside.step id={gate_id} confirmed=false wait=false"
         )
         r.line(
             "What to do next: re-run with --confirm after the operator completes the step."
@@ -76,8 +76,11 @@ def run_step(
                 f"Record: bedside.step id={gate_id} confirmed=false pending=true"
             )
             return r
-        _emit_step(r := CommandResult(OK), gate_id, prompt, expect)
-        prompt_messages = list(r.messages)
+        pre = CommandResult(OK)
+        _emit_step(pre, gate_id, prompt, expect)
+        # Print before blocking: CLI only flushes CommandResult after return.
+        _print_now(pre.messages)
+        interactive_flushed = True
         try:
             if input_fn is not None:
                 raw = input_fn("Confirm (yes/no): ")
@@ -94,11 +97,13 @@ def run_step(
         parsed = _truthy(raw)
         if parsed is None:
             r = CommandResult(SETUP_ERROR)
-            r.messages = prompt_messages
+            # Step already flushed; only error lines for CLI reprint.
             r.line(f"step: could not parse confirmation {raw!r}.")
             r.line("What to do next: answer yes or no (or use --confirm / --decline).")
             return r
         confirmed = parsed
+    else:
+        interactive_flushed = False
 
     code = OK if confirmed else HUMAN_NEEDED
     payload = {
@@ -111,18 +116,26 @@ def run_step(
     r = CommandResult(code)
     if json_out:
         r.line(json.dumps(payload, ensure_ascii=False))
-    else:
+        return r
+
+    if not interactive_flushed:
         _emit_step(r, gate_id, prompt, expect)
-        r.line(f"Confirmed: {'true' if confirmed else 'false'}")
-        if not confirmed:
-            r.line(
-                "Step not confirmed. Do not continue the path (principle 8: no cliff)."
-            )
+    r.line(f"Confirmed: {'true' if confirmed else 'false'}")
+    if not confirmed:
         r.line(
-            f"Record: bedside.step id={gate_id} confirmed="
-            f"{'true' if confirmed else 'false'}"
+            "Step not confirmed. Do not continue the path (principle 8: no cliff)."
         )
+    r.line(
+        f"Record: bedside.step id={gate_id} confirmed="
+        f"{'true' if confirmed else 'false'}"
+    )
     return r
+
+
+def _print_now(messages: list[str]) -> None:
+    """Flush operator-facing lines before a blocking stdin read."""
+    for line in messages:
+        print(line, flush=True)
 
 
 def _emit_step(

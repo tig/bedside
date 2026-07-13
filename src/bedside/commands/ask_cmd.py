@@ -75,10 +75,11 @@ def run_ask(
         r.line("ask: need at least two --choices.")
         r.line("What to do next: e.g. `--choices yes,no` or `--choices a,b,c`.")
         return r
-    if len(set(choices)) != len(choices):
+    # Case-insensitive uniqueness (resolve_choice matches case-insensitively).
+    if len({c.lower() for c in choices}) != len(choices):
         r = CommandResult(SETUP_ERROR)
-        r.line("ask: choices must be unique.")
-        r.line("What to do next: remove duplicate labels from --choices.")
+        r.line("ask: choices must be unique (case-insensitive).")
+        r.line("What to do next: remove duplicate labels from --choices (e.g. Yes/yes).")
         return r
 
     recommended = default if default is not None else choices[0]
@@ -91,6 +92,7 @@ def run_ask(
     ordered = order_choices(choices, recommended)
 
     selected: str | None = None
+    interactive_flushed = False
     if answer is not None:
         selected = resolve_choice(answer, ordered)
         if selected is None:
@@ -114,6 +116,9 @@ def run_ask(
             return r
         pre = CommandResult(OK)
         _emit_prompt(pre, gate_id, prompt, ordered, recommended)
+        # Print before blocking: CLI only flushes CommandResult after return.
+        _print_now(pre.messages)
+        interactive_flushed = True
         try:
             if input_fn is not None:
                 raw = input_fn("Answer: ")
@@ -130,7 +135,7 @@ def run_ask(
         selected = resolve_choice(raw, ordered)
         if selected is None:
             r = CommandResult(SETUP_ERROR)
-            r.messages = list(pre.messages)
+            # Prompt already flushed; only error lines for CLI reprint.
             r.line(f"ask: answer {raw!r} is not a valid choice.")
             r.line(f"What to do next: pick one of {ordered} (or 1-{len(ordered)}).")
             return r
@@ -152,7 +157,8 @@ def run_ask(
         r.line(json.dumps(payload, ensure_ascii=False))
         return r
 
-    _emit_prompt(r, gate_id, prompt, ordered, recommended)
+    if not interactive_flushed:
+        _emit_prompt(r, gate_id, prompt, ordered, recommended)
     r.line(f"Selected: {selected}")
     r.line(f"matched_recommended: {'true' if matched else 'false'}")
     if not matched:
@@ -165,6 +171,12 @@ def run_ask(
         f"recommended={recommended} matched={'true' if matched else 'false'}"
     )
     return r
+
+
+def _print_now(messages: list[str]) -> None:
+    """Flush operator-facing lines before a blocking stdin read."""
+    for line in messages:
+        print(line, flush=True)
 
 
 def _emit_prompt(

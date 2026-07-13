@@ -66,6 +66,23 @@ def test_ask_requires_id_prompt():
     assert run_ask(gate_id="x", prompt="").exit_code == SETUP_ERROR
 
 
+def test_ask_cli_missing_id_is_setup_error():
+    """Argparse required flags must surface as exit 30, not argparse's 2."""
+    code = main(["ask", "--prompt", "Go?"])
+    assert code == SETUP_ERROR
+
+
+def test_ask_case_insensitive_duplicate_choices():
+    r = run_ask(
+        gate_id="g",
+        prompt="Go?",
+        choices=["Yes", "yes"],
+        answer="yes",
+    )
+    assert r.exit_code == SETUP_ERROR
+    assert "case-insensitive" in "\n".join(r.messages)
+
+
 def test_ask_noninteractive_without_answer():
     r = run_ask(
         gate_id="g",
@@ -156,6 +173,40 @@ def test_step_no_wait():
         wait_confirm=False,
     )
     assert r.exit_code == HUMAN_NEEDED
+    joined = "\n".join(r.messages)
+    assert "wait=false" in joined
+    assert "wait=true" not in joined
+
+
+def test_ask_interactive_prints_before_read(capsys):
+    r = run_ask(
+        gate_id="g",
+        prompt="Deploy now?",
+        choices=["yes", "no"],
+        default="no",
+        input_fn=lambda _p: "no",
+        stdin_isatty=True,
+    )
+    assert r.exit_code == OK
+    out = capsys.readouterr().out
+    assert "Gate: g" in out
+    assert "Deploy now?" in out
+    assert "Choices (recommended first):" in out
+
+
+def test_step_interactive_prints_before_read(capsys):
+    r = run_step(
+        gate_id="plug-usb",
+        prompt="Plug the cable.",
+        expect="LED on",
+        input_fn=lambda _p: "yes",
+        stdin_isatty=True,
+    )
+    assert r.exit_code == OK
+    out = capsys.readouterr().out
+    assert "Step: plug-usb" in out
+    assert "Plug the cable." in out
+    assert "LED on" in out
 
 
 def test_ask_cli():
@@ -208,14 +259,13 @@ def test_step_cli_confirm():
     assert code == OK
 
 
-def test_operator_gate_fixtures_match(tmp_path: Path):
-    """Shipped ask/step fixtures evaluated by bedside eval."""
+def test_operator_gate_fixtures_match():
+    """Shipped ask/step fixtures must exist and match expect."""
     repo = Path(__file__).resolve().parents[1]
     from bedside.commands.eval_cmd import run_eval
 
     for name in ("operator-gate-ask", "operator-gate-step"):
         path = repo / "eval" / "fixtures" / "known-good" / name
-        if not path.is_dir():
-            continue
+        assert path.is_dir(), f"missing shipped fixture: {path}"
         r = run_eval(repo, [path])
         assert r.exit_code == OK, (name, r.messages)
