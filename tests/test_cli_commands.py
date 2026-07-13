@@ -132,3 +132,21 @@ def test_vendor_copy_rejects_self_path(tmp_path: Path):
         raise AssertionError("expected ValueError for source == dest")
     except ValueError as e:
         assert "same path" in str(e)
+
+
+def test_init_vendor_self_path_is_setup_error(tmp_path: Path):
+    """Safety guard must exit 30 with recovery text, not traceback."""
+    vendor = tmp_path / "third_party" / "bedside"
+    (vendor / "contract").mkdir(parents=True)
+    (vendor / "contract" / "README.md").write_text("c\n", encoding="utf-8")
+    r = run_init(
+        tmp_path,
+        vendor_from=vendor,
+        vendor_dest="third_party/bedside",
+        force=True,
+    )
+    assert r.exit_code == SETUP_ERROR
+    joined = "\n".join(r.messages)
+    assert "Vendor copy failed" in joined
+    assert "same path" in joined or "inside source" in joined
+    assert "What to do next" in joined
