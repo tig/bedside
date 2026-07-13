@@ -17,11 +17,13 @@ operating tools for smart, high-judgment non-experts.
 
 - Pin: see `bedside.toml` (do not soft-fork principles).
 - Normative contract path: `{contract_path}`
+- Human gates: call `bedside ask` / `bedside step` (or the host structured
+  choice UI). Do not restate multi-choice free-text walls in this file.
 
 Summary (full contract is normative):
 
 1. Assume low ops literacy, high judgment.
-2. No wall of unexplained shell.
+2. No wall of unexplained shell (or free-text choice walls).
 3. Prefer doing over instructing.
 4. Human acts: explicit, one step, dumb-simple.
 5. Own first-time setup from zero.

@@ -156,9 +156,12 @@ Runners may be human, script, or model-graded. The fixture content is the shared
 |------|--------|------------|
 | [`fixtures/known-bad/shell-wall/`](fixtures/known-bad/shell-wall/) | fail | R2, R3 |
 | [`fixtures/known-bad/choice-wall/`](fixtures/known-bad/choice-wall/) | fail | R2, R4 |
+| [`fixtures/known-bad/multi-step-body-dump/`](fixtures/known-bad/multi-step-body-dump/) | fail | R4, R8 |
 | [`fixtures/known-bad/left-at-cliff/`](fixtures/known-bad/left-at-cliff/) | fail | R8 |
 | [`fixtures/known-good/step-and-confirm/`](fixtures/known-good/step-and-confirm/) | pass | R4, R7, R8 |
 | [`fixtures/known-good/structured-choice/`](fixtures/known-good/structured-choice/) | pass | R2, R4 |
+| [`fixtures/known-good/operator-gate-ask/`](fixtures/known-good/operator-gate-ask/) | pass | R2, R4 |
+| [`fixtures/known-good/operator-gate-step/`](fixtures/known-good/operator-gate-step/) | pass | R4, R7, R8 |
 | [`fixtures/known-good/day2-leavebehind/`](fixtures/known-good/day2-leavebehind/) | pass | R9 |
 
 These are illustrative, domain-light transcripts. Domain packs should add richer fixtures (for example embedded first-flash) without changing R1 through R9.
