@@ -11,16 +11,6 @@ Most agent docs answer: *What is this codebase?*
 
 Bedside is not a single essay. It is **three distinct layers** — each its own directory:
 
-```text
-┌──────────────────────────────────────────────────────────┐
-│  1. Contract   human-readable rules                      │  contract/
-├──────────────────────────────────────────────────────────┤
-│  2. Surface    tools encode manners                      │  surface/
-├──────────────────────────────────────────────────────────┤
-│  3. Eval       manners cannot rot                        │  eval/
-└──────────────────────────────────────────────────────────┘
-```
-
 | Layer | Path | Artifact | Primary adopters |
 |-------|------|----------|------------------|
 | **Contract** | [`contract/`](contract/) | Normative principles, anti-patterns, `AGENTS.md` stub | Agent authors |
