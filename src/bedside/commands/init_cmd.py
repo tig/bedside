@@ -94,12 +94,14 @@ def run_init(
         dest = (root / vendor_dest).resolve()
         try:
             copied = vendor_copy(src, dest, include_src=include_src)
-        except (OSError, FileNotFoundError) as e:
+        except (OSError, FileNotFoundError, ValueError) as e:
+            # ValueError: self-vendor / dest nested under source safety guards.
             bad = CommandResult(SETUP_ERROR)
             bad.line(f"Vendor copy failed: {e}")
             bad.line(
                 "What to do next: pass a local tig/bedside checkout to "
-                "`--vendor-from` (must contain contract/)."
+                "`--vendor-from` (must contain contract/). Do not point "
+                "`--vendor-from` at the existing product vendor tree itself."
             )
             return bad
         detected = detect_pin(src)
@@ -139,7 +141,9 @@ def run_init(
 
     if not skip_domain_notes:
         notes = root / cfg.domain_notes
-        if notes.is_file() and not force:
+        # Never clobber product domain notes on --force re-vendor; only scaffold
+        # when missing. Agents fill BEDSIDE.md once; refresh updates third_party only.
+        if notes.is_file():
             r.line(f"Left existing {cfg.domain_notes}")
         else:
             notes.write_text(BEDSIDE_MD, encoding="utf-8")
