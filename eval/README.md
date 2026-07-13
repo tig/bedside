@@ -135,18 +135,26 @@ These are illustrative, domain-light transcripts. Domain packs should add richer
 
 ## Implementing a runner
 
-v0 does not ship a required runner binary. A minimal runner:
+This repo ships a minimal runner as the `bedside` Python CLI (`bedside eval`).
 
 1. Load fixture `meta.toml` and `transcript.md`.
-2. Apply rubric R1 through R9 (rules engine, checklist UI, or constrained judge prompt that may only cite rubric IDs).
-3. Assert `result == meta.expect`.
-4. Exit non-zero on mismatch.
+2. Apply rubric R1 through R9 (rule heuristics in v0; constrained judge later).
+3. Assert focused principles match `expect`.
+4. Exit 20 on mismatch, 30 on setup errors, 0 on success.
+
+```bash
+pip install -e .
+bedside eval eval/fixtures
+bedside eval eval/fixtures/known-bad/shell-wall
+```
 
 CI sketch:
 
 ```text
-bedside-eval known-bad/*  → each must fail rubric
-bedside-eval known-good/* → each must pass rubric
+bedside eval eval/fixtures/known-bad   # each expect=fail must score fail
+bedside eval eval/fixtures/known-good  # each expect=pass must score pass
+# or one shot:
+bedside eval eval/fixtures
 ```
 
 ## Eval checklist

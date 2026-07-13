@@ -76,11 +76,52 @@ Illustration: embedded / host-first metal in [silico](https://github.com/tig/sil
 
 Other pack shapes: cloud first-deploy, data/ML bootstrap, on-prem appliance bring-up.
 
+## CLI (minimal Python)
+
+Agent-first verbs for pin, adoption health, and rubric eval. Command logic is UI-agnostic under `src/bedside/commands/` so a future [tui-cs/cli](https://github.com/tig) front-end can replace the argparse adapter without rewriting behavior.
+
+Requires Python 3.11+.
+
+```bash
+# from this repo
+pip install -e ".[dev]"
+
+bedside init --pin v0.1.0
+bedside doctor
+bedside eval                    # default: eval/fixtures when present
+bedside eval path/to/fixture
+bedside eval --json eval/fixtures
+```
+
+| Verb | Job | Exit codes |
+|------|-----|------------|
+| `init` | Write `bedside.toml`, `BEDSIDE.md` domain scaffold, `AGENTS.md` stub | 0 ok; 30 setup |
+| `doctor` | Plain-language adoption check (config, contract on disk, AGENTS, notes) | 0 ok; 30 setup |
+| `eval` | Score fixture dir(s) against R1-R9; assert `expect` in meta.toml | 0 ok; 20 manners mismatch; 30 setup |
+
+Exit codes (stable for agents):
+
+| Code | Meaning |
+|------|---------|
+| 0 | OK |
+| 10 | Human action needed (reserved) |
+| 20 | Manners fail (`eval` expect mismatch) |
+| 30 | Tool or setup error |
+
+`init` does not run `git submodule` for you. Vendor or submodule `tig/bedside` so `contract_path` exists, then `doctor`.
+
+```bash
+pytest -q
+```
+
 ## Repo layout
 
 ```text
 README.md           # this index
 LICENSE             # Apache-2.0
+pyproject.toml      # bedside package
+src/bedside/        # CLI + eval engine
+tests/
 contract/           # layer 1: rules
 surface/            # layer 2: product patterns
 eval/               # layer 3: rubric + fixtures
@@ -91,9 +132,9 @@ eval/               # layer 3: rubric + fixtures
 
 ## Status
 
-v0. Three layer artifacts. No required runner package yet.
+v0.1. Three layer artifacts plus minimal Python CLI (`init`, `doctor`, `eval`). Rule-based eval only. Front-end is argparse; cores ready for tui-cs/cli later.
 
-Issues and PRs welcome for clearer principles, domain packs, runner sketches, more fixtures, and `BEDSIDE.md` conventions.
+Issues and PRs welcome for clearer principles, domain packs, stronger eval rules, more fixtures, and `BEDSIDE.md` conventions.
 
 ## License
 

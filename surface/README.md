@@ -10,6 +10,8 @@ Layer 2 of 3. Product patterns that encode operator manners in tools so agents a
 
 Without surface work, Bedside is doctrine agents may ignore. Without the [contract](../contract/), surface copy has no normative bar. Without [eval](../eval/), surface quality can rot unnoticed.
 
+This repo ships a minimal Python CLI (`bedside init|doctor|eval`) as a first surface. Command cores are UI-agnostic for a future tui-cs/cli front-end; see the [root README](../README.md#cli-minimal-python).
+
 ## Purpose
 
 The contract says *what* good operator care is. The surface is *where* it ships:
