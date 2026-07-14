@@ -1,5 +1,7 @@
 # Bedside
 
+![Bedside](docs/images/hero.jpg)
+
 Most agent docs answer: *What is this codebase?*
 
 **Bedside** answers: *How do you treat the human in the loop?*
