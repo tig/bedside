@@ -10,9 +10,7 @@ Canonical art for README and GitHub social preview.
 | [`social-preview-master.jpg`](social-preview-master.jpg) | Full 2:1 composition before resize | ~2:1 source for GH export |
 | [`social-preview.jpg`](social-preview.jpg) | GitHub repo social / Open Graph | **1280×640** (2:1), under 1 MB |
 
-`hero.jpg` is the approved cartoon master (coder in bed, Four Laws, silico-style step bubble). Social uses a matching 2:1 master so export does not crop the 16:9 hero.
-
-Older experiments live beside these (`hero-*.jpg`, `social-preview-*.jpg`). Prefer the two canonical names above for product surfaces. Do not delete variants without an explicit ask.
+`hero.jpg` is the approved cartoon master (coder in bed, Four Laws, silico-style step bubble). Social uses a matching 2:1 master so export does not crop the 16:9 hero. Keep only these three image files plus this README.
 
 ## GitHub social preview
 
