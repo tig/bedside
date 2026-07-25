@@ -29,6 +29,8 @@ Bedside is operator care for the host path: setup, tools, deploys, recoveries, a
 
 ## Tenets (non-negotiable)
 
+On what a tenet is, and how to write one: [Principal Engineer Tenets (unless you know better ones)](https://blog.kindel.com/2026/07/25/principal-engineer-tenets-unless-you-know-better-ones/).
+
 Violating these violates the point of an agent that operates the path for a human.
 
 ### 1. Assume low ops literacy, high judgment
