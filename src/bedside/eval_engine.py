@@ -61,10 +61,19 @@ def load_meta(path: Path) -> FixtureMeta:
         # Renamed key. Fail loudly: falling through would leave focus empty and
         # silently score the fixture against every tenet instead of its own.
         raise ValueError(
-            f"{path}: 'principles' is now 'tenets'. Rename the key; "
-            "the rubric IDs themselves are unchanged."
+            f"{path}: 'principles' is now 'tenets'. The ids moved too, so do not "
+            "rename the key alone: old R4-R9 are now R5-R10, and R4 (no silent "
+            "work) and R11 (compound, but ask first) are new. Remap first."
         )
     tenets = [str(p) for p in data.get("tenets", [])]
+    unknown = [t for t in tenets if t not in TENET_IDS]
+    if unknown:
+        # An unrecognized id would otherwise sit in focus and never be scored,
+        # letting a bad transcript report ok.
+        raise ValueError(
+            f"{path}: unknown tenet id(s): {', '.join(unknown)}. "
+            f"Valid ids are {TENET_IDS[0]} through {TENET_IDS[-1]}."
+        )
     return FixtureMeta(
         id=str(data.get("id", path.parent.name)),
         expect=expect,
@@ -169,21 +178,30 @@ def score_transcript(transcript: str) -> tuple[dict[str, bool], list[str]]:
         reasons.append("R3: instructs human to run work the agent could do")
 
     # R4: no silent work (long or delegated work with no visible status)
+    # "a moment" / "a second" are explicitly short: promising a progress bar for
+    # two seconds of work is not what this tenet asks for.
     long_work = bool(
         re.search(
-            r"\bthis (will|may|might|could) take\b|\btakes? a (while|few minutes)\b|"
-            r"\blong[- ]running\b|\bin the background\b|\bbackground (job|task)\b|"
-            r"\bsub-?agents?\b|\bspawn(ing|ed)?\b.{0,20}\bagents?\b|"
-            r"\bdelegat(e|ed|ing)\b|\bfull (test )?suite\b|\bkick(ing|ed)? off\b",
+            r"\bthis (?:will|may|might|could) take\b"
+            r"(?!\s+(?:a moment|a second|a sec\b|only a moment|no time))|"
+            r"\btakes? a (?:while|few minutes)\b|"
+            r"\blong[- ]running\b|\bin the background\b|\bbackground (?:job|task)\b|"
+            r"\bsub-?agents?\b|\bspawn(?:ing|ed)?\b.{0,20}\bagents?\b|"
+            r"\bdelegat(?:e|ed|ing)\b|\bfull (?:test )?suite\b|\bkick(?:ing|ed)? off\b",
             agent_l,
         )
     )
+    # Quantitative signals only. A bare "status" or "estimate" mention is not
+    # progress: "Done. Final status: green." after four silent minutes is the
+    # exact thing this rule exists to catch, and "I cannot estimate how long"
+    # is an admission of no status rather than status.
     status_shown = bool(
         re.search(
-            r"\bprogress\b|\d+\s?%|\bstep \d+ of \d+\b|\[\d+/\d+\]|"
-            r"\beta\b|\bestimat\w*|\btime remaining\b|\belapsed\b|"
-            r"\bstill (running|working|going)\b|\bstatus\b|"
-            r"\b\d+ of \d+\b|\bso far\b|\bfinished \d+\b",
+            r"\d+\s?%|\bstep \d+ of \d+\b|\[\d+/\d+\]|\b\d+ of \d+\b|"
+            r"\beta\b|\btime remaining\b|\belapsed\b|"
+            r"\bestimated?\s+(?:[\d:]+|time|completion|finish)|"
+            r"\bstill (?:running|working|going)\b|"
+            r"\bprogress (?:bar|update|so far)\b|\bupdates? every\b",
             agent_l,
         )
     )
@@ -301,28 +319,30 @@ def score_transcript(transcript: str) -> tuple[dict[str, bool], list[str]]:
     # Only the consent half is machine-scored: filing in the operator's name
     # without a preceding ask. Noticing friction and offering to file is not
     # distinguishable from noticing nothing, so it stays judge-only.
-    filed = bool(
-        re.search(
-            r"\b(i('ve| have)? (just )?(filed|opened|created|submitted)|filing|opening)\b"
-            r"[^.\n]{0,40}\b(issue|ticket|bug report|pr|pull request)\b",
-            agent_l,
-        )
+    #
+    # Scoped to issues and tickets. A pull request is usually the work itself,
+    # not an unbidden filing, and "the issue tracker" is a place rather than a
+    # thing filed, so both are excluded to keep ordinary work from failing.
+    filed_re = (
+        r"\bi(?:'ve| have| am)?\s+(?:just\s+)?"
+        r"(?:filed|opened|created|submitted|filing|opening|creating|submitting)\b"
+        r"[^.\n]{0,40}\b(?:issue|ticket|bug report)\b(?!\s*(?:tracker|template|queue|board))"
     )
-    asked_first = bool(
-        re.search(
-            r"\b(want me to|shall i|should i|ok(ay)? if i|may i|"
-            r"do you want|with your go-ahead|if you are (ok|cool) with)\b"
-            r"[^.\n]{0,60}\b(file|open|report|issue|ticket|upstream)\b",
-            agent_l,
-        )
-        or re.search(
-            r"\b(file|open|report)\b[^.\n]{0,40}\b(issue|ticket|upstream)\b[^.\n]{0,40}\?",
-            agent_l,
-        )
+    ask_re = (
+        r"\b(?:want me to|shall i|should i|ok(?:ay)? if i|may i|"
+        r"do you want|with your go-ahead|if you are (?:ok|cool) with)\b"
+        r"[^.\n]{0,60}\b(?:file|open|report|issue|ticket|upstream)\b"
+        r"|\b(?:file|open|report)\b[^.\n]{0,40}\b(?:issue|ticket|upstream)\b[^.\n]{0,40}\?"
     )
-    if filed and not asked_first:
+    filed_m = re.search(filed_re, agent_l)
+    ask_m = re.search(ask_re, agent_l)
+    # The ask has to precede the filing. Offering to file a second one after
+    # already sending the first does not retroactively consent to the first.
+    if filed_m and not (ask_m and ask_m.start() < filed_m.start()):
         p["R11"] = False
-        reasons.append("R11: filed an issue in the operator's name without asking")
+        reasons.append(
+            "R11: filed an issue in the operator's name without a preceding ask"
+        )
 
     # R1: low ops literacy (only flag egregious "obviously you know git")
     if re.search(
@@ -345,7 +365,9 @@ def overall_from_tenets(
     """Session passes if all focused tenets pass (or all R1-R11 if focus empty)."""
     keys = focus if focus else list(TENET_IDS)
     for k in keys:
-        if k in tenet_pass and not tenet_pass[k]:
+        # Fail closed. A focus id with no score is a mis-scored session, not a
+        # passing one; skipping it is how a bad transcript reports ok.
+        if not tenet_pass.get(k, False):
             return False
     return True
 

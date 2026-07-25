@@ -94,7 +94,7 @@ eval/fixtures/
       transcript.md
 ```
 
-Same shape as upstream `eval/fixtures`. Rubric IDs stay R1-R11.
+Same shape as upstream `eval/fixtures`. Rubric IDs stay R1-R11. Upgrading from a pin older than v0.2? See [CHANGELOG.md](../CHANGELOG.md): the ids were renumbered and the `meta.toml` key renamed in the same release.
 
 ### Multi-root eval
 

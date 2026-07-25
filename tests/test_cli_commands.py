@@ -150,3 +150,21 @@ def test_init_vendor_self_path_is_setup_error(tmp_path: Path):
     assert "Vendor copy failed" in joined
     assert "same path" in joined or "inside source" in joined
     assert "What to do next" in joined
+
+
+def test_version_matches_pyproject():
+    """Two sources of truth for the version drifted once; keep them pinned."""
+    import re
+    import tomllib
+
+    from bedside import __version__
+
+    root = Path(__file__).resolve().parents[1]
+    with (root / "pyproject.toml").open("rb") as f:
+        declared = tomllib.load(f)["project"]["version"]
+    assert __version__ == declared
+
+    changelog = (root / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert re.search(rf"^## {re.escape(declared)}\b", changelog, re.M), (
+        f"CHANGELOG.md has no section for {declared}"
+    )

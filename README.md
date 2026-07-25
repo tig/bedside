@@ -124,6 +124,7 @@ pytest -q
 
 ```text
 README.md           # this index
+CHANGELOG.md        # breaking changes + migration
 LICENSE             # Apache-2.0
 pyproject.toml      # bedside package
 src/bedside/        # CLI + eval engine
@@ -138,7 +139,9 @@ eval/               # layer 3: rubric + fixtures
 
 ## Status
 
-v0.1. Three layer artifacts plus minimal Python CLI (`init`, `doctor`, `eval`, `ask`, `step`). Vendor-copy, multi-root domain fixtures, rule-based eval, operator gates. Front-end is argparse; cores ready for tui-cs/cli later.
+v0.2 (unreleased). Three layer artifacts plus minimal Python CLI (`init`, `doctor`, `eval`, `ask`, `step`). Vendor-copy, multi-root domain fixtures, rule-based eval, operator gates. Front-end is argparse; cores ready for tui-cs/cli later.
+
+v0.2 renumbers the rubric ids and renames the `meta.toml` focus key. Vendored consumers: read [CHANGELOG.md](CHANGELOG.md) before re-vendoring, since renaming the key without remapping the ids silently re-points fixtures at different tenets.
 
 Adoption: [docs/adopting.md](docs/adopting.md).
 
