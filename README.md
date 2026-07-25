@@ -12,13 +12,11 @@ I pulled this out of real operator-care work in [silico](https://github.com/tig/
 
 ## Three artifacts
 
-Bedside is not one essay. It is three directories:
-
 1. [`contract/`](contract/): normative rules, anti-patterns, and an `AGENTS.md` stub.
 2. [`surface/`](surface/): CLI and product patterns that encode manners in tools.
 3. [`eval/`](eval/): rubric, scorecard, and known-bad / known-good fixtures.
 
-Read them in order if you are new. Pin a tag or commit of this repo. Do not soft-fork the principles into a kinder local copy.
+Read them in order if you are new. Pin a tag or commit of this repo.
 
 | Start here if you | Path |
 |-------------------|------|
@@ -32,18 +30,13 @@ The operator is smart and high-judgment in their domain (product, hardware, clin
 
 They own judgment and confirmation. They do not need to be examined, shamed, or handed a wall of unexplained commands.
 
-Some projects call this person Grady-shaped. Use whatever name fits. Bedside is the contract; the codename is optional.
-
 ## What Bedside is not
 
-- Not "be friendly" or generic politeness.
-- Not end-customer product UX (different persona).
+- Not an end-customer product UX (different persona).
 - Not a second codebase map (`AGENTS.md` still owns layout and build rules).
 - Not a demand that power users abandon shortcuts they already know.
 
-Bedside is operator care for the host path: setup, tools, deploys, recoveries. Anything where a smart non-expert can get stranded.
-
-## Principles (summary)
+## Tenets (summary)
 
 Normative text lives in [`contract/`](contract/). Summary only:
 
@@ -55,7 +48,7 @@ Normative text lives in [`contract/`](contract/). Summary only:
 6. Own scary surfaces in plain language.
 7. Confirm in their words before irreversible or physical steps.
 8. Never leave them at a cliff.
-9. Teach only what Day 2 requires.
+9. Teach only what the current phase requires.
 
 ## Adoption checklist
 
@@ -70,13 +63,13 @@ Layer checklists: [contract](contract/README.md#contract-adoption) · [surface](
 
 ## Domain packs
 
-Principles are universal. Examples are not.
+Tenets are universal. Examples are not.
 
-A domain pack adds persona notes, first-run paths, scary-surface glossaries, verbs, and fixtures. It does not rewrite the nine principles.
+A domain pack adds persona notes, first-run paths, scary-surface glossaries, verbs, and fixtures. It does not rewrite the tenets.
 
 Illustration: embedded / host-first metal in [silico](https://github.com/tig/silico).
 
-Other pack shapes: cloud first-deploy, data/ML bootstrap, on-prem appliance bring-up.
+Other pack examples: blog post managment, cloud first-deploy, data/ML bootstrap, on-prem appliance bring-up.
 
 ## CLI (minimal Python)
 
@@ -117,7 +110,7 @@ Exit codes (stable for agents):
 | 20 | Manners fail (`eval` expect mismatch) |
 | 30 | Tool or setup error |
 
-**Consumers:** prefer vendor-copy under `third_party/bedside` (see [docs/adopting.md](docs/adopting.md)). Domain fixtures stay in product `eval/fixtures/` so re-vendor does not wipe them. Submodule works too if you already use it.
+**Agent Consumers:** prefer vendor-copy under `third_party/bedside` (see [docs/adopting.md](docs/adopting.md)). Domain fixtures stay in product `eval/fixtures/` so re-vendor does not wipe them. Submodule works too if you already use it.
 
 Eval summary lines: `failed=` is focus principles only; non-focus misses print as `info=` (for example `info=R9` when expect still matches).
 
