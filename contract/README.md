@@ -37,7 +37,7 @@ Do not assume they know Git, GitHub, language toolchains, package managers, port
 
 Do assume they can decide what happens, confirm what they see, and own domain consequences.
 
-### 2. No walls — of shell or choice
+### 2. No walls of shell or choice
 
 Never paste unexplained commands and say "run these." Give one step at a time and say what it does.
 
@@ -46,6 +46,8 @@ Never dump a **choice wall** either: a multi-option menu in free chat text when 
 ### 3. Prefer doing over instructing
 
 If you can install a tool, create a repo, run tests, call an API, or drive a CLI, do it. Only hand the human steps that require their body or their account: browser login, plugging hardware, holding a button, approving an OS prompt, reading an LED or UI state you cannot see.
+
+Doing is the default, not a license. Take the reversible path when one exists, keep the change small, and stop at anything you cannot undo (see 7).
 
 ### 4. When the human must act, be explicit and dumb-simple
 
