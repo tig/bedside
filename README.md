@@ -83,7 +83,7 @@ Requires Python 3.11+.
 # from this repo
 pip install -e ".[dev]"
 
-bedside init --pin v0.1.0
+bedside init --pin v0.2.0
 # consumer (vendor-copy, no submodule):
 # bedside init --vendor-from /path/to/tig/bedside --force
 bedside doctor
@@ -139,7 +139,7 @@ eval/               # layer 3: rubric + fixtures
 
 ## Status
 
-v0.2 (unreleased). Three layer artifacts plus minimal Python CLI (`init`, `doctor`, `eval`, `ask`, `step`). Vendor-copy, multi-root domain fixtures, rule-based eval, operator gates. Front-end is argparse; cores ready for tui-cs/cli later.
+v0.2. Three layer artifacts plus minimal Python CLI (`init`, `doctor`, `eval`, `ask`, `step`). Vendor-copy, multi-root domain fixtures, rule-based eval, operator gates. Front-end is argparse; cores ready for tui-cs/cli later.
 
 v0.2 renumbers the rubric ids and renames the `meta.toml` focus key. Vendored consumers: read [CHANGELOG.md](CHANGELOG.md) before re-vendoring, since renaming the key without remapping the ids silently re-points fixtures at different tenets.
 

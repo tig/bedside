@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 (unreleased)
+## 0.2.0
 
 Breaking. Vendored consumers should read the migration notes before re-vendoring.
 
