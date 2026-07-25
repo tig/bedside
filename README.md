@@ -43,12 +43,13 @@ Normative text lives in [`contract/`](contract/). Summary only:
 1. Assume low ops literacy, high judgment.
 2. No walls of shell or choice.
 3. Prefer doing over instructing.
-4. Human acts are explicit and dumb-simple.
-5. Own first-time setup from zero.
-6. Own scary surfaces in plain language.
-7. Confirm what they can see, in their words.
-8. Never leave them at a cliff.
-9. Teach only what tomorrow requires.
+4. No silent work.
+5. Human acts are explicit and dumb-simple.
+6. Own first-time setup from zero.
+7. Own scary surfaces in plain language.
+8. Confirm what they can see, in their words.
+9. Never leave them at a cliff.
+10. Teach only what tomorrow requires.
 
 ## Adoption checklist
 
@@ -97,7 +98,7 @@ bedside step --id plug-usb --prompt "Plug the data USB cable." --expect "Power L
 |------|-----|------------|
 | `init` | Write `bedside.toml`, domain notes, `AGENTS.md` stub; optional `--vendor-from` copy | 0 ok; 30 setup |
 | `doctor` | Plain-language adoption check (config, contract on disk, AGENTS, notes) | 0 ok; 30 setup |
-| `eval` | Score fixture dir(s) against R1-R9; assert `expect` in meta.toml | 0 ok; 20 manners mismatch; 30 setup |
+| `eval` | Score fixture dir(s) against R1-R10; assert `expect` in meta.toml | 0 ok; 20 manners mismatch; 30 setup |
 | `ask` | One structured yes/no or multi-choice operator gate (recommended first) | 0 recommended; 10 other/needed; 30 setup |
 | `step` | One human body/browser act, then confirm in their words | 0 confirmed; 10 declined/needed; 30 setup |
 
@@ -112,7 +113,7 @@ Exit codes (stable for agents):
 
 **Agent Consumers:** prefer vendor-copy under `third_party/bedside` (see [docs/adopting.md](docs/adopting.md)). Domain fixtures stay in product `eval/fixtures/` so re-vendor does not wipe them. Submodule works too if you already use it.
 
-Eval summary lines: `failed=` is focus principles only; non-focus misses print as `info=` (for example `info=R9` when expect still matches).
+Eval summary lines: `failed=` is focus principles only; non-focus misses print as `info=` (for example `info=R10` when expect still matches).
 
 ```bash
 pytest -q

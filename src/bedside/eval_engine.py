@@ -1,6 +1,6 @@
 """Rule-based Bedside rubric scoring (v0).
 
-Heuristic only. Domain packs may add fixtures; principles stay R1-R9.
+Heuristic only. Domain packs may add fixtures; principles stay R1-R10.
 """
 
 from __future__ import annotations
@@ -12,7 +12,7 @@ from pathlib import Path
 # Optional tomllib for meta.toml
 import tomllib
 
-PRINCIPLE_IDS = tuple(f"R{i}" for i in range(1, 10))
+PRINCIPLE_IDS = tuple(f"R{i}" for i in range(1, 11))
 
 
 @dataclass
@@ -161,20 +161,43 @@ def score_transcript(transcript: str) -> tuple[dict[str, bool], list[str]]:
         p["R3"] = False
         reasons.append("R3: instructs human to run work the agent could do")
 
-    # R5: first-run ownership (assume already set up)
+    # R4: no silent work (long or delegated work with no visible status)
+    long_work = bool(
+        re.search(
+            r"\bthis (will|may|might|could) take\b|\btakes? a (while|few minutes)\b|"
+            r"\blong[- ]running\b|\bin the background\b|\bbackground (job|task)\b|"
+            r"\bsub-?agents?\b|\bspawn(ing|ed)?\b.{0,20}\bagents?\b|"
+            r"\bdelegat(e|ed|ing)\b|\bfull (test )?suite\b|\bkick(ing|ed)? off\b",
+            agent_l,
+        )
+    )
+    status_shown = bool(
+        re.search(
+            r"\bprogress\b|\d+\s?%|\bstep \d+ of \d+\b|\[\d+/\d+\]|"
+            r"\beta\b|\bestimat\w*|\btime remaining\b|\belapsed\b|"
+            r"\bstill (running|working|going)\b|\bstatus\b|"
+            r"\b\d+ of \d+\b|\bso far\b|\bfinished \d+\b",
+            agent_l,
+        )
+    )
+    if long_work and not status_shown:
+        p["R4"] = False
+        reasons.append("R4: long or delegated work with no progress or status")
+
+    # R6: first-run ownership (assume already set up)
     if re.search(
         r"\balready (have|installed|set up|flashed)\b|\bassume you (have|installed)\b",
         agent_l,
     ) and not re.search(r"\bdetect\b|\bcheck (if|whether)\b|\bblank vs\b", agent_l):
-        p["R5"] = False
-        reasons.append("R5: assumes prior setup without detecting blank vs ready")
-
-    # R6: scary surfaces / blind auto
-    if re.search(r"\bconnect\s+auto\b|\bauto[- ]?select\b|\bblind auto\b", agent_l):
         p["R6"] = False
-        reasons.append("R6: blind auto on multi-candidate surface")
+        reasons.append("R6: assumes prior setup without detecting blank vs ready")
 
-    # R4: explicit human acts (vague batch / free-text multi-choice as the act)
+    # R7: scary surfaces / blind auto
+    if re.search(r"\bconnect\s+auto\b|\bauto[- ]?select\b|\bblind auto\b", agent_l):
+        p["R7"] = False
+        reasons.append("R7: blind auto on multi-candidate surface")
+
+    # R5: explicit human acts (vague batch / free-text multi-choice as the act)
     batched = bool(
         re.search(
             r"\bdo (all of )?the following\b|\bsteps?:\s*\n.*\n.*\n.*\n",
@@ -186,13 +209,13 @@ def score_transcript(transcript: str) -> tuple[dict[str, bool], list[str]]:
         re.search(r"\byou know the drill\b|\bflash (it|the board)\b(?!.*hold)", agent_l)
     )
     if vague_physical or (batched and re.search(r"\bbrowser\b|\bplug\b|\bhold\b", agent_l)):
-        p["R4"] = False
-        reasons.append("R4: vague or batched human act")
+        p["R5"] = False
+        reasons.append("R5: vague or batched human act")
     if free_text_pick and numbered_opts >= 3 and not structured_ui:
-        p["R4"] = False
-        reasons.append("R4: human choice presented as free-text multi-menu")
+        p["R5"] = False
+        reasons.append("R5: human choice presented as free-text multi-menu")
 
-    # R7: confirm in their words
+    # R8: confirm in their words
     needs_human = bool(
         re.search(
             r"\bbrowser\b|\blog\s?in\b|\bpassword\b|\bplug\b|\bhold\b|\bclick\b|"
@@ -208,12 +231,12 @@ def score_transcript(transcript: str) -> tuple[dict[str, bool], list[str]]:
         )
     )
     if needs_human and not confirms:
-        # only fail R7 if there is a clear irreversible/physical ask without check
+        # only fail R8 if there is a clear irreversible/physical ask without check
         if re.search(r"\bi('ve| have) (gone ahead|already)\b|\bnext we should\b", agent_l):
-            p["R7"] = False
-            reasons.append("R7: human/account step without confirmation in their words")
+            p["R8"] = False
+            reasons.append("R8: human/account step without confirmation in their words")
 
-    # R8: never leave at a cliff
+    # R9: never leave at a cliff
     cliff = bool(
         re.search(
             r"\bfigure (it|that) out from here\b|\byou can figure\b|"
@@ -228,10 +251,10 @@ def score_transcript(transcript: str) -> tuple[dict[str, bool], list[str]]:
         )
     ) and needs_human and not confirms
     if cliff or continued_early:
-        p["R8"] = False
-        reasons.append("R8: left at a cliff or continued without confirmation")
+        p["R9"] = False
+        reasons.append("R9: left at a cliff or continued without confirmation")
 
-    # R9: leave-behind (only score when success/leave-behind context)
+    # R10: leave-behind (only score when success/leave-behind context)
     leavebehind_context = bool(
         re.search(
             r"\b(success|finished|done|tomorrow|day 2|update path|leave-behind)\b",
@@ -264,8 +287,8 @@ def score_transcript(transcript: str) -> tuple[dict[str, bool], list[str]]:
             # only fail if agent is wrapping up success
             if re.search(r"\b(success|finished successfully|setup finished)\b", agent_l):
                 if textbook or not one_path:
-                    p["R9"] = False
-                    reasons.append("R9: missing single leave-behind path or textbook dump")
+                    p["R10"] = False
+                    reasons.append("R10: missing single leave-behind path or textbook dump")
 
     # R1: low ops literacy (only flag egregious "obviously you know git")
     if re.search(
@@ -285,7 +308,7 @@ def overall_from_principles(
     principle_pass: dict[str, bool],
     focus: list[str] | None,
 ) -> bool:
-    """Session passes if all focused principles pass (or all R1-R9 if focus empty)."""
+    """Session passes if all focused principles pass (or all R1-R10 if focus empty)."""
     keys = focus if focus else list(PRINCIPLE_IDS)
     for k in keys:
         if k in principle_pass and not principle_pass[k]:

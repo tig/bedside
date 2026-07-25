@@ -25,12 +25,13 @@ Summary (full contract is normative):
 1. Assume low ops literacy, high judgment.
 2. No walls of shell or choice.
 3. Prefer doing over instructing.
-4. Human acts are explicit and dumb-simple.
-5. Own first-time setup from zero.
-6. Own scary surfaces in plain language.
-7. Confirm what they can see, in their words.
-8. Never leave them at a cliff.
-9. Teach only what tomorrow requires.
+4. No silent work.
+5. Human acts are explicit and dumb-simple.
+6. Own first-time setup from zero.
+7. Own scary surfaces in plain language.
+8. Confirm what they can see, in their words.
+9. Never leave them at a cliff.
+10. Teach only what tomorrow requires.
 
 ### Domain notes (this repo only)
 

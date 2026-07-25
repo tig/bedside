@@ -24,12 +24,13 @@ Summary (full contract is normative):
 1. Assume low ops literacy, high judgment.
 2. No walls of shell or choice.
 3. Prefer doing over instructing.
-4. Human acts are explicit and dumb-simple.
-5. Own first-time setup from zero.
-6. Own scary surfaces in plain language.
-7. Confirm what they can see, in their words.
-8. Never leave them at a cliff.
-9. Teach only what tomorrow requires.
+4. No silent work.
+5. Human acts are explicit and dumb-simple.
+6. Own first-time setup from zero.
+7. Own scary surfaces in plain language.
+8. Confirm what they can see, in their words.
+9. Never leave them at a cliff.
+10. Teach only what tomorrow requires.
 
 ### Domain notes (this repo only)
 
@@ -41,7 +42,7 @@ Summary (full contract is normative):
 
 - `bedside.cli`: argparse adapter only.
 - `bedside.commands.*`: UI-agnostic command cores (future tui-cs/cli should call these).
-- `bedside.eval_engine`: rule-based R1-R9 scoring.
+- `bedside.eval_engine`: rule-based R1-R10 scoring.
 - Operator gates: `ask` (structured choice) and `step` (one human act + confirm).
 - Exit codes: 0 ok, 10 human-needed / non-recommended ask / declined step, 20 manners fail, 30 setup error.
 

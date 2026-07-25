@@ -99,7 +99,7 @@ def test_step_and_confirm_summary_uses_info_not_failed():
     rep = evaluate_fixture_dir(repo / "eval" / "fixtures" / "known-good" / "step-and-confirm")
     assert rep.ok
     assert rep.failed_focus == []
-    # R9 may fail as non-focus; must not appear in failed_focus
+    # R10 may fail as non-focus; must not appear in failed_focus
     r = run_eval(
         repo,
         [repo / "eval" / "fixtures" / "known-good" / "step-and-confirm"],
