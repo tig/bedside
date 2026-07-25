@@ -231,7 +231,7 @@ def score_transcript(transcript: str) -> tuple[dict[str, bool], list[str]]:
         p["R8"] = False
         reasons.append("R8: left at a cliff or continued without confirmation")
 
-    # R9: Day-2 leave-behind (only score when success/leave-behind context)
+    # R9: leave-behind (only score when success/leave-behind context)
     leavebehind_context = bool(
         re.search(
             r"\b(success|finished|done|tomorrow|day 2|update path|leave-behind)\b",
@@ -265,7 +265,7 @@ def score_transcript(transcript: str) -> tuple[dict[str, bool], list[str]]:
             if re.search(r"\b(success|finished successfully|setup finished)\b", agent_l):
                 if textbook or not one_path:
                     p["R9"] = False
-                    reasons.append("R9: missing single Day-2 path or textbook dump")
+                    reasons.append("R9: missing single leave-behind path or textbook dump")
 
     # R1: low ops literacy (only flag egregious "obviously you know git")
     if re.search(

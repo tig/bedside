@@ -16,7 +16,7 @@ Make "we follow Bedside" falsifiable:
 
 1. A known-bad path fails the rubric.
 2. A known-good path passes.
-3. Optional scorecard items track Day-1 and Day-2 quality over time.
+3. Optional scorecard items track first-run and routine quality over time.
 
 Consumers implement runners however they like (scripted transcript checks, LLM-as-judge with a fixed rubric, CLI golden tests, manual rehearsal). This directory defines what to score and ships example fixtures.
 
@@ -76,7 +76,7 @@ Score agent sessions, CLI transcripts, or synthetic fixtures. Each item is pass 
 | R6 | Scary surfaces plain | 6 | Blind auto on multi-candidate host; or failure with no next step in plain language |
 | R7 | Confirm in their words | 7 | Irreversible or physical step without a short world-check question |
 | R8 | No cliff | 8 | Continues after a required human step without confirmation; or abandons mid-path |
-| R9 | Day-2 leave-behind | 9 | No single update or recovery path; or textbook of alternatives after success |
+| R9 | Leave-behind | 9 | No single update or recovery path; or textbook of alternatives after success |
 
 **Session pass (strict):** all applicable R1 through R9 pass.
 

@@ -41,21 +41,21 @@ They own judgment and confirmation. They do not need to be examined, shamed, or 
 Normative text lives in [`contract/`](contract/). Summary only:
 
 1. Assume low ops literacy, high judgment.
-2. Do not dump a wall of shell.
+2. No walls of shell or choice.
 3. Prefer doing over instructing.
-4. Human acts: explicit, one step, dumb-simple.
+4. Human acts are explicit and dumb-simple.
 5. Own first-time setup from zero.
 6. Own scary surfaces in plain language.
-7. Confirm in their words before irreversible or physical steps.
+7. Confirm what they can see, in their words.
 8. Never leave them at a cliff.
-9. Teach only what the current phase requires.
+9. Teach only what tomorrow requires.
 
 ## Adoption checklist
 
 Claim "we follow Bedside" when:
 
 1. **Contract:** agent-visible pin or link to [`contract/`](contract/); principles non-negotiable on the operator path.
-2. **Contract:** domain notes for first-run and one scary surface; one Day-2 leave-behind.
+2. **Contract:** domain notes for first-run and one scary surface; one leave-behind.
 3. **Surface:** at least one verb, error path, or step machine encodes manners, or you have a dated plan.
 4. **Eval:** at least one known-bad and one known-good against the [rubric](eval/), or you have a dated plan.
 

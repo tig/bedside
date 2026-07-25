@@ -22,20 +22,20 @@ operating tools for smart, high-judgment non-experts.
 Summary (full contract is normative):
 
 1. Assume low ops literacy, high judgment.
-2. No wall of unexplained shell (or free-text choice walls).
+2. No walls of shell or choice.
 3. Prefer doing over instructing.
-4. Human acts: explicit, one step, dumb-simple.
+4. Human acts are explicit and dumb-simple.
 5. Own first-time setup from zero.
 6. Own scary surfaces in plain language.
-7. Confirm in their words before irreversible or physical steps.
+7. Confirm what they can see, in their words.
 8. Never leave them at a cliff.
-9. Teach only what Day 2 requires.
+9. Teach only what tomorrow requires.
 
 ### Domain notes (this repo only)
 
 - First-run: `pip install -e ".[dev]"` then `bedside doctor` and `bedside eval`.
 - Scary surfaces: none physical; prefer doing install and tests yourself.
-- Day-2 leave-behind: `pytest -q` and `bedside eval` (one proof path for manners).
+- Leave-behind: `pytest -q` and `bedside eval` (one proof path for manners).
 
 ## CLI architecture
 

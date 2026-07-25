@@ -20,7 +20,7 @@ The contract says *what* good operator care is. The surface is *where* it ships:
 - Error messages and exit codes.
 - Guided multi-step flows (especially body and browser acts).
 - Discovery UIs (ports, accounts, devices, clusters).
-- Docs generators that leave a Day-2 path.
+- Docs generators that leave a routine path.
 
 Design for smart, high-judgment non-experts and for the agents driving the tools on their behalf.
 
@@ -39,7 +39,7 @@ Thin, scriptable commands with operator-facing messages (not only machine logs).
 | `deploy --verify` | Deploy then prove identity or version; fail closed on mismatch |
 | `gate` | Named host proof of done (tests or sim); green means claimable |
 
-Agents should prefer these verbs over assembling ad-hoc shell walls or free-text multi-choice menus. Humans should be able to re-run one documented verb on Day 2.
+Agents should prefer these verbs over assembling ad-hoc shell walls or free-text multi-choice menus. Humans should be able to re-run one documented verb tomorrow.
 
 ### Operator gates (`bedside ask` / `bedside step`)
 
@@ -136,7 +136,7 @@ Anti-pattern (choice wall): a good plan table followed by "reply with start #15,
 
 Maps to contract principles 2 and 4.
 
-### 7. Day-2 leave-behind
+### 7. Leave-behind
 
 After success, the surface (or the docs it generates) leaves one routine path:
 
@@ -177,6 +177,6 @@ Reference illustration: [silico](https://github.com/tig/silico) host path (docto
 - [ ] First-run is a first-class path (verb or documented step machine), not folklore.
 - [ ] Multi-candidate discovery lists plain-language candidates; avoids blind auto when unsafe.
 - [ ] Fail closed on identity or verify mismatches (or documented exception).
-- [ ] Success leaves one Day-2 command and what "good" looks like.
+- [ ] Success leaves one routine command and what "good" looks like.
 
 Contract pin: [`contract/`](../contract/). Prove manners: [`eval/`](../eval/).

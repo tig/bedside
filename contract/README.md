@@ -71,9 +71,9 @@ Before an irreversible or physical step, one short check they can answer from th
 
 ### 8. Never leave them at a cliff
 
-If you are blocked (password, click, hardware not present), say exactly what you need and wait. Do not continue as if they finished. Do not abandon the thread with "you can figure it out from here" after a partial path.
+If you are blocked on a password, a click, or hardware that is not present, say exactly what you need and wait. Do not continue as if they finished. Do not abandon the thread with "you can figure it out from here" after a partial path.
 
-### 9. Teach only what Day 2 requires
+### 9. Teach only what tomorrow requires
 
 After success, leave one documented update or recovery path and what "good" looks like. No textbook. No five equivalent ways.
 
@@ -81,14 +81,14 @@ After success, leave one documented update or recovery path and what "good" look
 
 | Anti-pattern | Principle violated |
 |--------------|--------------------|
-| Unexplained multi-command dump | 2 (wall of shell) |
+| Unexplained multi-command dump | 2 (shell wall) |
 | Multi-choice free-text dump when a structured picker exists | 2 and 4 (choice wall / human acts) |
 | "Run this" when the agent could run it | 3 (prefer doing) |
 | Assumed prior install, flash, or login | 5 (first-time setup) |
 | Blind auto-select on multi-candidate hosts | 6 (scary surfaces) |
 | Continuing after a required human step without confirmation | 7 and 8 (confirm / no cliff) |
 | Stack trace as the only failure UX | 6 and 8 (plain language / recovery) |
-| Textbook dump after success | 9 (Day 2 only) |
+| Textbook dump after success | 9 (tomorrow only) |
 | Softening the contract in a local fork | Drift; pin or quote instead |
 
 Scoring these in CI belongs in [`eval/`](../eval/). Encoding prevention in tools belongs in [`surface/`](../surface/).
@@ -117,14 +117,14 @@ manners for agents operating tools for smart, high-judgment non-experts.
 Summary (full contract is normative):
 
 1. Assume low ops literacy, high judgment.
-2. No wall of unexplained shell.
+2. No walls of shell or choice.
 3. Prefer doing over instructing.
-4. Human acts: explicit, one step, dumb-simple.
+4. Human acts are explicit and dumb-simple.
 5. Own first-time setup from zero.
 6. Own scary surfaces in plain language.
-7. Confirm in their words before irreversible or physical steps.
+7. Confirm what they can see, in their words.
 8. Never leave them at a cliff.
-9. Teach only what Day 2 requires.
+9. Teach only what tomorrow requires.
 
 Domain notes for this repo:
 - <!-- first-run, scary surfaces, one update command -->
@@ -144,7 +144,7 @@ Principles are universal. Examples are not. Domain notes belong in the consuming
 - Operator persona notes (still smart and high-judgment).
 - First-run path from zero.
 - Scary surfaces glossary (plain language).
-- One Day-2 update or recovery leave-behind.
+- One update or recovery leave-behind.
 
 Example (embedded / host-first metal); see [silico](https://github.com/tig/silico):
 
@@ -159,6 +159,6 @@ Tool verbs and error UX for a domain go in [`surface/`](../surface/). Bad and go
 - [ ] Agent-visible link or pin to this contract.
 - [ ] Principles marked non-negotiable on the operator path.
 - [ ] Domain notes cover first-run and one scary surface (or dated plan).
-- [ ] Day-2 leave-behind: one update or recovery path in plain language.
+- [ ] Leave-behind: one update or recovery path in plain language.
 
 Full product adoption (surface and eval) is in the [root README](../README.md#adoption-checklist).
