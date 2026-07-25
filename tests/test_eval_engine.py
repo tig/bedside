@@ -50,6 +50,23 @@ def test_visible_progress_passes_r4():
     assert p["R4"] is True
 
 
+def test_filed_without_asking_fails_r11():
+    text = (
+        FIXTURES / "known-bad" / "filed-without-asking" / "transcript.md"
+    ).read_text(encoding="utf-8")
+    p, reasons = score_transcript(text)
+    assert p["R11"] is False
+    assert any("R11" in r for r in reasons)
+
+
+def test_compound_with_consent_passes_r11():
+    text = (
+        FIXTURES / "known-good" / "compound-with-consent" / "transcript.md"
+    ).read_text(encoding="utf-8")
+    p, _ = score_transcript(text)
+    assert p["R11"] is True
+
+
 def test_choice_wall_fails_r2_r4():
     text = (FIXTURES / "known-bad" / "choice-wall" / "transcript.md").read_text(
         encoding="utf-8"

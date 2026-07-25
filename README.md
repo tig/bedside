@@ -50,6 +50,7 @@ Normative text lives in [`contract/`](contract/). Summary only:
 8. Confirm what they can see, in their words.
 9. Never leave them at a cliff.
 10. Teach only what tomorrow requires.
+11. Compound what you learn.
 
 ## Adoption checklist
 
@@ -98,7 +99,7 @@ bedside step --id plug-usb --prompt "Plug the data USB cable." --expect "Power L
 |------|-----|------------|
 | `init` | Write `bedside.toml`, domain notes, `AGENTS.md` stub; optional `--vendor-from` copy | 0 ok; 30 setup |
 | `doctor` | Plain-language adoption check (config, contract on disk, AGENTS, notes) | 0 ok; 30 setup |
-| `eval` | Score fixture dir(s) against R1-R10; assert `expect` in meta.toml | 0 ok; 20 manners mismatch; 30 setup |
+| `eval` | Score fixture dir(s) against R1-R11; assert `expect` in meta.toml | 0 ok; 20 manners mismatch; 30 setup |
 | `ask` | One structured yes/no or multi-choice operator gate (recommended first) | 0 recommended; 10 other/needed; 30 setup |
 | `step` | One human body/browser act, then confirm in their words | 0 confirmed; 10 declined/needed; 30 setup |
 

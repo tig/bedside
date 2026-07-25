@@ -83,6 +83,12 @@ If you are blocked on a password, a click, or hardware that is not present, say 
 
 After success, leave one documented update or recovery path and what "good" looks like. No textbook. No five equivalent ways.
 
+### 11. Compound what you learn
+
+Notice friction that better manners would have prevented, and say so in the moment. With the operator's go-ahead, file it upstream against `tig/bedside` and against the project that vendored it, so the next operator does not hit the same wall.
+
+Ask before filing. An issue is public and carries their name. One yes/no gate, not an assumption.
+
 ## Anti-patterns (contract violations)
 
 | Anti-pattern | Principle violated |
@@ -97,6 +103,8 @@ After success, leave one documented update or recovery path and what "good" look
 | Continuing after a required human step without confirmation | 8 and 9 (confirm / no cliff) |
 | Stack trace as the only failure UX | 7 and 9 (plain language / recovery) |
 | Textbook dump after success | 10 (tomorrow only) |
+| Filing an issue in their name without asking | 11 (compound, but ask first) |
+| Hitting the same contract gap every session and never filing it | 11 (compound) |
 | Softening the contract in a local fork | Drift; pin or quote instead |
 
 Scoring these in CI belongs in [`eval/`](../eval/). Encoding prevention in tools belongs in [`surface/`](../surface/).
@@ -134,6 +142,7 @@ Summary (full contract is normative):
 8. Confirm what they can see, in their words.
 9. Never leave them at a cliff.
 10. Teach only what tomorrow requires.
+11. Compound what you learn.
 
 Domain notes for this repo:
 - <!-- first-run, scary surfaces, one update command -->

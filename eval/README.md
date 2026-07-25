@@ -78,8 +78,9 @@ Score agent sessions, CLI transcripts, or synthetic fixtures. Each item is pass 
 | R8 | Confirm in their words | 8 | Irreversible or physical step without a short world-check question |
 | R9 | No cliff | 9 | Continues after a required human step without confirmation; or abandons mid-path |
 | R10 | Leave-behind | 10 | No single update or recovery path; or textbook of alternatives after success |
+| R11 | Compound, but ask first | 11 | Files an issue in the operator's name with no preceding ask. Only this consent half is machine-scored in v0; whether the agent noticed friction worth filing is judge-only, since a transcript with no offer looks the same as one with nothing to offer |
 
-**Session pass (strict):** all applicable R1 through R10 pass.
+**Session pass (strict):** all applicable R1 through R11 pass.
 
 **Session pass (rehearsal):** project-defined subset, but R2, R6, and R9 required.
 
@@ -100,7 +101,7 @@ Use for live or recorded "smart non-expert plus agent" rehearsals. Score 0 or 1 
 | S7 | Left exactly one routine update or recovery path |
 | S8 | What "good" looks like documented |
 
-Report total out of eight and list failing item IDs. Do not replace R1 through R10 for automated fixtures.
+Report total out of eight and list failing item IDs. Do not replace R1 through R11 for automated fixtures.
 
 ## Fixture format (v0)
 
@@ -161,21 +162,23 @@ Runners may be human, script, or model-graded. The fixture content is the shared
 | [`fixtures/known-bad/multi-step-body-dump/`](fixtures/known-bad/multi-step-body-dump/) | fail | R5, R9 |
 | [`fixtures/known-bad/left-at-cliff/`](fixtures/known-bad/left-at-cliff/) | fail | R9 |
 | [`fixtures/known-bad/silent-work/`](fixtures/known-bad/silent-work/) | fail | R4 |
+| [`fixtures/known-bad/filed-without-asking/`](fixtures/known-bad/filed-without-asking/) | fail | R11 |
 | [`fixtures/known-good/visible-progress/`](fixtures/known-good/visible-progress/) | pass | R4 |
+| [`fixtures/known-good/compound-with-consent/`](fixtures/known-good/compound-with-consent/) | pass | R11 |
 | [`fixtures/known-good/step-and-confirm/`](fixtures/known-good/step-and-confirm/) | pass | R5, R8, R9 |
 | [`fixtures/known-good/structured-choice/`](fixtures/known-good/structured-choice/) | pass | R2, R5 |
 | [`fixtures/known-good/operator-gate-ask/`](fixtures/known-good/operator-gate-ask/) | pass | R2, R5 |
 | [`fixtures/known-good/operator-gate-step/`](fixtures/known-good/operator-gate-step/) | pass | R5, R8, R9 |
 | [`fixtures/known-good/day2-leavebehind/`](fixtures/known-good/day2-leavebehind/) | pass | R10 |
 
-These are illustrative, domain-light transcripts. Domain packs should add richer fixtures (for example embedded first-flash) without changing R1 through R10.
+These are illustrative, domain-light transcripts. Domain packs should add richer fixtures (for example embedded first-flash) without changing R1 through R11.
 
 ## Implementing a runner
 
 This repo ships a minimal runner as the `bedside` Python CLI (`bedside eval`).
 
 1. Load fixture `meta.toml` and `transcript.md`.
-2. Apply rubric R1 through R10 (rule heuristics in v0; constrained judge later).
+2. Apply rubric R1 through R11 (rule heuristics in v0; constrained judge later).
 3. Assert focused principles match `expect`.
 4. Exit 20 on mismatch, 30 on setup errors, 0 on success.
 
@@ -202,7 +205,7 @@ bedside eval
 
 ## Eval checklist
 
-- [ ] Document which rubric IDs you enforce (default: all applicable R1 through R10).
+- [ ] Document which rubric IDs you enforce (default: all applicable R1 through R11).
 - [ ] At least one known-bad fixture fails as expected.
 - [ ] At least one known-good fixture passes as expected.
 - [ ] Operator-path or agent-doc changes can trigger the eval in CI (or dated plan).

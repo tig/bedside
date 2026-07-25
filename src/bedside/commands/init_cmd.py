@@ -32,6 +32,7 @@ Summary (full contract is normative):
 8. Confirm what they can see, in their words.
 9. Never leave them at a cliff.
 10. Teach only what tomorrow requires.
+11. Compound what you learn.
 
 ### Domain notes (this repo only)
 

@@ -31,6 +31,7 @@ Summary (full contract is normative):
 8. Confirm what they can see, in their words.
 9. Never leave them at a cliff.
 10. Teach only what tomorrow requires.
+11. Compound what you learn.
 
 ### Domain notes (this repo only)
 
@@ -42,7 +43,7 @@ Summary (full contract is normative):
 
 - `bedside.cli`: argparse adapter only.
 - `bedside.commands.*`: UI-agnostic command cores (future tui-cs/cli should call these).
-- `bedside.eval_engine`: rule-based R1-R10 scoring.
+- `bedside.eval_engine`: rule-based R1-R11 scoring.
 - Operator gates: `ask` (structured choice) and `step` (one human act + confirm).
 - Exit codes: 0 ok, 10 human-needed / non-recommended ask / declined step, 20 manners fail, 30 setup error.
 
