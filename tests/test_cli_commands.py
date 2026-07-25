@@ -83,7 +83,7 @@ def test_eval_cli_detects_mismatch(tmp_path: Path):
     fix = tmp_path / "bad-as-good"
     fix.mkdir()
     (fix / "meta.toml").write_text(
-        'id = "x"\nexpect = "pass"\nprinciples = ["R2"]\n',
+        'id = "x"\nexpect = "pass"\ntenets = ["R2"]\n',
         encoding="utf-8",
     )
     (fix / "transcript.md").write_text(

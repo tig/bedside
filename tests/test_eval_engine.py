@@ -1,6 +1,13 @@
 from pathlib import Path
 
-from bedside.eval_engine import evaluate_fixture_dir, iter_fixture_dirs, score_transcript
+import pytest
+
+from bedside.eval_engine import (
+    evaluate_fixture_dir,
+    iter_fixture_dirs,
+    load_meta,
+    score_transcript,
+)
 
 REPO = Path(__file__).resolve().parents[1]
 FIXTURES = REPO / "eval" / "fixtures"
@@ -14,22 +21,14 @@ def test_shipped_fixtures_match_expect():
         assert report.ok, (report.fixture_id, report.reasons, report.tenet_pass)
 
 
-def test_legacy_principles_key_still_read(tmp_path):
-    """Fixtures written against the pre-tenets key keep working after a re-vendor."""
-    d = tmp_path / "known-bad" / "legacy"
-    d.mkdir(parents=True)
-    (d / "meta.toml").write_text(
-        'id = "legacy"\nexpect = "fail"\nprinciples = ["R2", "R3"]\n', encoding="utf-8"
+def test_renamed_principles_key_errors_loudly(tmp_path):
+    """The old key must fail with guidance, not silently widen focus to all tenets."""
+    meta = tmp_path / "meta.toml"
+    meta.write_text(
+        'id = "legacy"\nexpect = "fail"\nprinciples = ["R2"]\n', encoding="utf-8"
     )
-    (d / "transcript.md").write_text(
-        (FIXTURES / "known-bad" / "shell-wall" / "transcript.md").read_text(
-            encoding="utf-8"
-        ),
-        encoding="utf-8",
-    )
-    report = evaluate_fixture_dir(d)
-    assert report.focus == ["R2", "R3"]
-    assert report.ok
+    with pytest.raises(ValueError, match="'principles' is now 'tenets'"):
+        load_meta(meta)
 
 
 def test_shell_wall_fails_r2_r3():

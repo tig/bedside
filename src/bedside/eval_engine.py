@@ -14,9 +14,6 @@ import tomllib
 
 TENET_IDS = tuple(f"R{i}" for i in range(1, 12))
 
-# Deprecated alias for consumers importing the old name.
-PRINCIPLE_IDS = TENET_IDS
-
 
 @dataclass
 class FixtureMeta:
@@ -42,11 +39,6 @@ class ScoreReport:
         return self.matched_expect
 
     @property
-    def principle_pass(self) -> dict[str, bool]:
-        """Deprecated alias for tenet_pass."""
-        return self.tenet_pass
-
-    @property
     def failed_focus(self) -> list[str]:
         return [k for k in self.focus if not self.tenet_pass.get(k, True)]
 
@@ -65,10 +57,14 @@ def load_meta(path: Path) -> FixtureMeta:
     expect = str(data.get("expect", "")).lower().strip()
     if expect not in {"pass", "fail"}:
         raise ValueError(f"{path}: expect must be 'pass' or 'fail', got {expect!r}")
-    # "tenets" is the current key; "principles" stays accepted so vendored
-    # consumer fixtures keep working across a re-vendor.
-    raw = data.get("tenets", data.get("principles", []))
-    tenets = [str(p) for p in raw]
+    if "tenets" not in data and "principles" in data:
+        # Renamed key. Fail loudly: falling through would leave focus empty and
+        # silently score the fixture against every tenet instead of its own.
+        raise ValueError(
+            f"{path}: 'principles' is now 'tenets'. Rename the key; "
+            "the rubric IDs themselves are unchanged."
+        )
+    tenets = [str(p) for p in data.get("tenets", [])]
     return FixtureMeta(
         id=str(data.get("id", path.parent.name)),
         expect=expect,
@@ -399,6 +395,3 @@ def iter_fixture_dirs(path: Path) -> list[Path]:
     )
     return [p.parent for p in found]
 
-
-# Deprecated alias for the pre-tenets name.
-overall_from_principles = overall_from_tenets

@@ -100,8 +100,6 @@ def run_eval(
                 "failed_focus": rep.failed_focus,
                 "info_failed": rep.info_failed,
                 "tenets": rep.tenet_pass,
-                # Deprecated alias; retained for existing JSON consumers.
-                "principles": rep.tenet_pass,
                 "reasons": rep.reasons,
             }
             for rep in reports

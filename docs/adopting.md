@@ -110,7 +110,7 @@ Missing empty domain dirs are skipped if not present; empty `known-bad/` with no
 
 ## Eval log lines
 
-Focus tenets come from each fixture's `meta.toml` `tenets` list (the older `principles` key is still accepted).
+Focus tenets come from each fixture's `meta.toml` `tenets` list.
 
 - `failed=R2,R3`: focus tenets that failed (drive expect).
 - `info=R10`: non-focus tenets that also failed; **do not** treat as CI failure when `expect` matched.

@@ -129,8 +129,6 @@ title = "Unexplained multi-command dump"
 notes = "Agent pastes five commands and tells the human to run them."
 ```
 
-The older `principles = [...]` key is still read as a fallback, so fixtures written against earlier versions keep scoring after a re-vendor.
-
 ### `transcript.md`
 
 Plain markdown. Use simple speaker labels:
