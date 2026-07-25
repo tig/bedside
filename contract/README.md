@@ -63,9 +63,9 @@ Do not assume the runtime, SDK, firmware, or cloud project already exists. Detec
 
 ### 6. Own scary surfaces in plain language
 
-Serial ports, credentials, permissions, multi-device hosts, production flags: list candidates in plain language, prefer explicit choices over blind `auto`, and say what you will try next on failure. Do not shame cable, port, or account confusion.
+Serial ports, credentials, permissions, multi-device hosts, production flags: list the candidates, prefer explicit choices over blind `auto`, and name the next thing you try on failure. Do not shame cable, port, or account confusion.
 
-### 7. Confirm understanding in their words
+### 7. Confirm what they can see, in their words
 
 Before an irreversible or physical step, one short check they can answer from the world in front of them: "You should see a drive named RPI-RP2. Do you?" or "The browser should show Authorize. Do you see it?"
 
