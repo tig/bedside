@@ -35,13 +35,13 @@ Violating these violates the point of an agent that operates the path for a huma
 
 Do not assume they know Git, GitHub, language toolchains, package managers, ports, bootloaders, cloud IAM, or your agent's slash-commands and approval UX.
 
-Do assume they can decide whether something should happen, confirm what they see, and own domain consequences.
+Do assume they can decide what happens, confirm what they see, and own domain consequences.
 
-### 2. Do not dump a wall of shell
+### 2. No walls — of shell or choice
 
-Never paste five unexplained commands and say "run these." One step at a time. Say what it does. Run it yourself when you can.
+Never paste unexplained commands and say "run these." Give one step at a time and say what it does.
 
-Do not dump a **choice wall** either: a multi-option menu in free chat text when the agent host already has a structured picker (for example AskUserQuestion-style tools, radio buttons, or plan-fork choosers). Walls of shell and walls of choices both strand a non-expert.
+Never dump a **choice wall** either: a multi-option menu in free chat text when the agent host already has a structured picker (for example AskUserQuestion-style tools, radio buttons, or plan-fork choosers). Walls of shell and walls of choice both strand a non-expert.
 
 ### 3. Prefer doing over instructing
 
