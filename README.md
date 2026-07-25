@@ -56,7 +56,7 @@ Normative text lives in [`contract/`](contract/). Summary only:
 
 Claim "we follow Bedside" when:
 
-1. **Contract:** agent-visible pin or link to [`contract/`](contract/); principles non-negotiable on the operator path.
+1. **Contract:** agent-visible pin or link to [`contract/`](contract/); tenets non-negotiable on the operator path.
 2. **Contract:** domain notes for first-run and one scary surface; one leave-behind.
 3. **Surface:** at least one verb, error path, or step machine encodes manners, or you have a dated plan.
 4. **Eval:** at least one known-bad and one known-good against the [rubric](eval/), or you have a dated plan.
@@ -114,7 +114,7 @@ Exit codes (stable for agents):
 
 **Agent Consumers:** prefer vendor-copy under `third_party/bedside` (see [docs/adopting.md](docs/adopting.md)). Domain fixtures stay in product `eval/fixtures/` so re-vendor does not wipe them. Submodule works too if you already use it.
 
-Eval summary lines: `failed=` is focus principles only; non-focus misses print as `info=` (for example `info=R10` when expect still matches).
+Eval summary lines: `failed=` is focus tenets only; non-focus misses print as `info=` (for example `info=R10` when expect still matches).
 
 ```bash
 pytest -q

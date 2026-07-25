@@ -8,7 +8,7 @@ Layer 3 of 3. Rubrics, fixtures, and scorecards so operator manners cannot rot i
 | Surface | [`surface/`](../surface/) | Tools encode manners |
 | **Eval** | [`eval/`](.) | Manners cannot rot (this artifact) |
 
-Without evals, Bedside is a blog post with a repo URL. Evals score behavior against the [contract](../contract/) and, where applicable, against [surface](../surface/) output. They do not redefine the principles.
+Without evals, Bedside is a blog post with a repo URL. Evals score behavior against the [contract](../contract/) and, where applicable, against [surface](../surface/) output. They do not redefine the tenets.
 
 ## Purpose
 
@@ -26,13 +26,13 @@ A project may claim Bedside eval coverage only if it has:
 
 1. At least one known-bad fixture or transcript that must fail (shell wall, skipped first-run, assumed literacy, left at a cliff, and so on).
 2. At least one known-good fixture or path that must pass the same rubric.
-3. A documented rubric with explicit pass/fail criteria mapped to contract principles.
+3. A documented rubric with explicit pass/fail criteria mapped to contract tenets.
 
 Optional but recommended:
 
 1. First-run rehearsal scorecard (below).
 2. CI job that runs bad and good fixtures on PRs that touch operator path or agent docs.
-3. Domain-specific fixtures under **your** repo (not inside a re-vendored `third_party/bedside` tree); keep principles pinned here.
+3. Domain-specific fixtures under **your** repo (not inside a re-vendored `third_party/bedside` tree); keep tenets pinned here.
 
 ### Domain packs (product fixtures)
 
@@ -111,7 +111,7 @@ Fixtures live under [`fixtures/`](fixtures/). Each fixture is a directory:
 fixtures/
   known-bad/
     shell-wall/
-      meta.toml          # id, expect = "fail", principles = ["R2"]
+      meta.toml          # id, expect = "fail", tenets = ["R2"]
       transcript.md      # agent/human dialogue or CLI log
   known-good/
     first-run-owned/
@@ -124,10 +124,12 @@ fixtures/
 ```toml
 id = "shell-wall"
 expect = "fail"          # "fail" | "pass"
-principles = ["R2"]      # rubric IDs that must drive the result
+tenets = ["R2"]          # rubric IDs that must drive the result
 title = "Unexplained multi-command dump"
 notes = "Agent pastes five commands and tells the human to run them."
 ```
+
+The older `principles = [...]` key is still read as a fallback, so fixtures written against earlier versions keep scoring after a re-vendor.
 
 ### `transcript.md`
 
@@ -155,7 +157,7 @@ Runners may be human, script, or model-graded. The fixture content is the shared
 
 ## Reference fixtures
 
-| Path | Expect | Principles |
+| Path | Expect | Tenets |
 |------|--------|------------|
 | [`fixtures/known-bad/shell-wall/`](fixtures/known-bad/shell-wall/) | fail | R2, R3 |
 | [`fixtures/known-bad/choice-wall/`](fixtures/known-bad/choice-wall/) | fail | R2, R5 |
@@ -179,7 +181,7 @@ This repo ships a minimal runner as the `bedside` Python CLI (`bedside eval`).
 
 1. Load fixture `meta.toml` and `transcript.md`.
 2. Apply rubric R1 through R11 (rule heuristics in v0; constrained judge later).
-3. Assert focused principles match `expect`.
+3. Assert focused tenets match `expect`.
 4. Exit 20 on mismatch, 30 on setup errors, 0 on success.
 
 ```bash
@@ -191,7 +193,7 @@ bedside eval third_party/bedside/eval/fixtures eval/fixtures
 
 Summary line semantics:
 
-- `failed=R2,R3`: focus principles from `meta.toml` that failed (drive expect).
+- `failed=R2,R3`: focus tenets from `meta.toml` that failed (drive expect).
 - `info=R10`: non-focus failures; informational when expect still matches.
 
 CI sketch:

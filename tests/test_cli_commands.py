@@ -62,7 +62,7 @@ def test_eval_multi_root(tmp_path: Path):
     domain = tmp_path / "eval" / "fixtures" / "known-bad" / "extra-wall"
     domain.mkdir(parents=True)
     (domain / "meta.toml").write_text(
-        'id = "extra-wall"\nexpect = "fail"\nprinciples = ["R2"]\n',
+        'id = "extra-wall"\nexpect = "fail"\ntenets = ["R2"]\n',
         encoding="utf-8",
     )
     (domain / "transcript.md").write_text(

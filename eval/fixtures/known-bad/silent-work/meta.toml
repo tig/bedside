@@ -1,5 +1,5 @@
 id = "silent-work"
 expect = "fail"
-principles = ["R4"]
+tenets = ["R4"]
 title = "Long delegated work with no visible status"
 notes = "Agent kicks off subagents and a long build, then goes quiet until it is done."

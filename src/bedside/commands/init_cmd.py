@@ -15,7 +15,7 @@ AGENTS_SECTION = """## Help the operator (Bedside)
 We follow [Bedside](https://github.com/tig/bedside): manners for agents
 operating tools for smart, high-judgment non-experts.
 
-- Pin: see `bedside.toml` (do not soft-fork principles).
+- Pin: see `bedside.toml` (do not soft-fork tenets).
 - Normative contract path: `{contract_path}`
 - Human gates: call `bedside ask` / `bedside step` (or the host structured
   choice UI). Do not restate multi-choice free-text walls in this file.
@@ -43,7 +43,7 @@ Summary (full contract is normative):
 
 BEDSIDE_MD = """# BEDSIDE.md (domain notes only)
 
-This file is **not** a fork of the Bedside principles.
+This file is **not** a fork of the Bedside tenets.
 
 Pin and paths: see `bedside.toml`. Normative rules live at the contract path.
 

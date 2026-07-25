@@ -15,7 +15,7 @@ Brand images: [docs/images/README.md](docs/images/README.md). Canonical `docs/im
 We follow [Bedside](https://github.com/tig/bedside): manners for agents
 operating tools for smart, high-judgment non-experts.
 
-- Pin: see `bedside.toml` (do not soft-fork principles).
+- Pin: see `bedside.toml` (do not soft-fork tenets).
 - Normative contract path: `contract`
 - Human gates: call `bedside ask` / `bedside step` (or the host structured choice UI).
 

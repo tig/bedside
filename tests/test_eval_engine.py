@@ -11,7 +11,25 @@ def test_shipped_fixtures_match_expect():
     assert len(dirs) >= 4
     for d in dirs:
         report = evaluate_fixture_dir(d)
-        assert report.ok, (report.fixture_id, report.reasons, report.principle_pass)
+        assert report.ok, (report.fixture_id, report.reasons, report.tenet_pass)
+
+
+def test_legacy_principles_key_still_read(tmp_path):
+    """Fixtures written against the pre-tenets key keep working after a re-vendor."""
+    d = tmp_path / "known-bad" / "legacy"
+    d.mkdir(parents=True)
+    (d / "meta.toml").write_text(
+        'id = "legacy"\nexpect = "fail"\nprinciples = ["R2", "R3"]\n', encoding="utf-8"
+    )
+    (d / "transcript.md").write_text(
+        (FIXTURES / "known-bad" / "shell-wall" / "transcript.md").read_text(
+            encoding="utf-8"
+        ),
+        encoding="utf-8",
+    )
+    report = evaluate_fixture_dir(d)
+    assert report.focus == ["R2", "R3"]
+    assert report.ok
 
 
 def test_shell_wall_fails_r2_r3():

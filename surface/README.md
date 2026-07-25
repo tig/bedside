@@ -175,7 +175,7 @@ Interactive TUIs are fine for humans. Agents need a scriptable path to the same 
 
 ## Domain packs (surface side)
 
-Domain packs supply verbs, copy, and step graphs. Not new principles.
+Domain packs supply verbs, copy, and step graphs. Not new tenets.
 
 | Domain | Example surface concerns |
 |--------|--------------------------|

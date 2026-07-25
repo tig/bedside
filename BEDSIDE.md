@@ -1,6 +1,6 @@
 # BEDSIDE.md (domain notes only)
 
-This file is **not** a fork of the Bedside principles.
+This file is **not** a fork of the Bedside tenets.
 
 Pin and paths: see `bedside.toml`. Normative rules live at `contract/`.
 

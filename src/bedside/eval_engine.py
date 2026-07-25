@@ -1,6 +1,6 @@
 """Rule-based Bedside rubric scoring (v0).
 
-Heuristic only. Domain packs may add fixtures; principles stay R1-R11.
+Heuristic only. Domain packs may add fixtures; tenets stay R1-R11.
 """
 
 from __future__ import annotations
@@ -12,14 +12,17 @@ from pathlib import Path
 # Optional tomllib for meta.toml
 import tomllib
 
-PRINCIPLE_IDS = tuple(f"R{i}" for i in range(1, 12))
+TENET_IDS = tuple(f"R{i}" for i in range(1, 12))
+
+# Deprecated alias for consumers importing the old name.
+PRINCIPLE_IDS = TENET_IDS
 
 
 @dataclass
 class FixtureMeta:
     id: str
     expect: str  # "pass" | "fail"
-    principles: list[str]
+    tenets: list[str]
     title: str = ""
     notes: str = ""
 
@@ -29,7 +32,7 @@ class ScoreReport:
     fixture_id: str
     expect: str
     overall_pass: bool  # did the session pass the rubric (focus only)?
-    principle_pass: dict[str, bool]
+    tenet_pass: dict[str, bool]
     reasons: list[str]
     matched_expect: bool  # overall_pass aligns with expect
     focus: list[str]
@@ -39,15 +42,20 @@ class ScoreReport:
         return self.matched_expect
 
     @property
+    def principle_pass(self) -> dict[str, bool]:
+        """Deprecated alias for tenet_pass."""
+        return self.tenet_pass
+
+    @property
     def failed_focus(self) -> list[str]:
-        return [k for k in self.focus if not self.principle_pass.get(k, True)]
+        return [k for k in self.focus if not self.tenet_pass.get(k, True)]
 
     @property
     def info_failed(self) -> list[str]:
-        """Non-focus principles that failed; informational only."""
+        """Non-focus tenets that failed; informational only."""
         focus_set = set(self.focus)
         return sorted(
-            k for k, v in self.principle_pass.items() if not v and k not in focus_set
+            k for k, v in self.tenet_pass.items() if not v and k not in focus_set
         )
 
 
@@ -57,11 +65,14 @@ def load_meta(path: Path) -> FixtureMeta:
     expect = str(data.get("expect", "")).lower().strip()
     if expect not in {"pass", "fail"}:
         raise ValueError(f"{path}: expect must be 'pass' or 'fail', got {expect!r}")
-    principles = [str(p) for p in data.get("principles", [])]
+    # "tenets" is the current key; "principles" stays accepted so vendored
+    # consumer fixtures keep working across a re-vendor.
+    raw = data.get("tenets", data.get("principles", []))
+    tenets = [str(p) for p in raw]
     return FixtureMeta(
         id=str(data.get("id", path.parent.name)),
         expect=expect,
-        principles=principles,
+        tenets=tenets,
         title=str(data.get("title", "")),
         notes=str(data.get("notes", "")),
     )
@@ -114,13 +125,13 @@ def _commandish_lines(text: str) -> int:
 
 
 def score_transcript(transcript: str) -> tuple[dict[str, bool], list[str]]:
-    """Return (principle_pass, reasons). True means principle satisfied (manners OK)."""
+    """Return (tenet_pass, reasons). True means tenet satisfied (manners OK)."""
 
     agent = _agent_blocks(transcript)
     agent_l = agent.lower()
     full_l = transcript.lower()
     reasons: list[str] = []
-    p: dict[str, bool] = {rid: True for rid in PRINCIPLE_IDS}
+    p: dict[str, bool] = {rid: True for rid in TENET_IDS}
 
     # R2: no shell wall / no choice wall
     fences = _count_fenced_blocks(agent)
@@ -331,14 +342,14 @@ def score_transcript(transcript: str) -> tuple[dict[str, bool], list[str]]:
     return p, reasons
 
 
-def overall_from_principles(
-    principle_pass: dict[str, bool],
+def overall_from_tenets(
+    tenet_pass: dict[str, bool],
     focus: list[str] | None,
 ) -> bool:
-    """Session passes if all focused principles pass (or all R1-R11 if focus empty)."""
-    keys = focus if focus else list(PRINCIPLE_IDS)
+    """Session passes if all focused tenets pass (or all R1-R11 if focus empty)."""
+    keys = focus if focus else list(TENET_IDS)
     for k in keys:
-        if k in principle_pass and not principle_pass[k]:
+        if k in tenet_pass and not tenet_pass[k]:
             return False
     return True
 
@@ -353,18 +364,18 @@ def evaluate_fixture_dir(fixture_dir: Path) -> ScoreReport:
 
     meta = load_meta(meta_path)
     transcript = transcript_path.read_text(encoding="utf-8")
-    principle_pass, reasons = score_transcript(transcript)
-    # For fixture grading, overall is driven by the principles listed in meta
-    # (those must determine the result). Other principles are informational.
-    focus = meta.principles or list(PRINCIPLE_IDS)
-    overall = overall_from_principles(principle_pass, focus)
+    tenet_pass, reasons = score_transcript(transcript)
+    # For fixture grading, overall is driven by the tenets listed in meta
+    # (those must determine the result). Other tenets are informational.
+    focus = meta.tenets or list(TENET_IDS)
+    overall = overall_from_tenets(tenet_pass, focus)
     expect_pass = meta.expect == "pass"
     matched = overall == expect_pass
 
     if not matched:
         reasons = list(reasons)
         reasons.append(
-            f"expect={meta.expect} but focused principles "
+            f"expect={meta.expect} but focused tenets "
             f"{focus} => {'pass' if overall else 'fail'}"
         )
 
@@ -372,7 +383,7 @@ def evaluate_fixture_dir(fixture_dir: Path) -> ScoreReport:
         fixture_id=meta.id,
         expect=meta.expect,
         overall_pass=overall,
-        principle_pass=principle_pass,
+        tenet_pass=tenet_pass,
         reasons=reasons,
         matched_expect=matched,
         focus=list(focus),
@@ -387,3 +398,7 @@ def iter_fixture_dirs(path: Path) -> list[Path]:
         p for p in path.rglob("meta.toml") if p.is_file()
     )
     return [p.parent for p in found]
+
+
+# Deprecated alias for the pre-tenets name.
+overall_from_principles = overall_from_tenets

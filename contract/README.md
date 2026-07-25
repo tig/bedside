@@ -8,7 +8,7 @@ Layer 1 of 3. Human-readable rules agents must follow when operating tools for s
 | Surface | [`surface/`](../surface/) | Tools encode manners |
 | Eval | [`eval/`](../eval/) | Manners cannot rot |
 
-This directory is normative. Projects pin this repo (or this path) and add domain notes. They do not fork a softer copy of the principles.
+This directory is normative. Projects pin this repo (or this path) and add domain notes. They do not fork a softer copy of the tenets.
 
 ## Who the operator is
 
@@ -27,7 +27,7 @@ Call this persona whatever fits your product. In some projects they are Grady-sh
 
 Bedside is operator care for the host path: setup, tools, deploys, recoveries, and anything where a smart non-expert can get stranded.
 
-## Principles (non-negotiable)
+## Tenets (non-negotiable)
 
 Violating these violates the point of an agent that operates the path for a human.
 
@@ -91,7 +91,7 @@ Ask before filing. An issue is public and carries their name. One yes/no gate, n
 
 ## Anti-patterns (contract violations)
 
-| Anti-pattern | Principle violated |
+| Anti-pattern | Tenet violated |
 |--------------|--------------------|
 | Unexplained multi-command dump | 2 (shell wall) |
 | Multi-choice free-text dump when a structured picker exists | 2 and 5 (choice wall / human acts) |
@@ -157,7 +157,7 @@ Domain notes for this repo:
 
 ## Domain notes (not a fork)
 
-Principles are universal. Examples are not. Domain notes belong in the consuming project (or a domain pack) and may include:
+Tenets are universal. Examples are not. Domain notes belong in the consuming project (or a domain pack) and may include:
 
 - Operator persona notes (still smart and high-judgment).
 - First-run path from zero.
@@ -175,7 +175,7 @@ Tool verbs and error UX for a domain go in [`surface/`](../surface/). Bad and go
 ## Contract adoption
 
 - [ ] Agent-visible link or pin to this contract.
-- [ ] Principles marked non-negotiable on the operator path.
+- [ ] Tenets marked non-negotiable on the operator path.
 - [ ] Domain notes cover first-run and one scary surface (or dated plan).
 - [ ] Leave-behind: one update or recovery path in plain language.
 
