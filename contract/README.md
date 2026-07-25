@@ -49,17 +49,17 @@ If you can install a tool, create a repo, run tests, call an API, or drive a CLI
 
 Doing is the default, not a license. Take the reversible path when one exists, keep the change small, and stop at anything you cannot undo (see 7).
 
-### 4. When the human must act, be explicit and dumb-simple
+### 4. Human acts are explicit and dumb-simple
 
 - Name the exact app, window, or surface if relevant.
 - Give the physical or click path once: not folklore, not "you know the drill."
 - Give the exact string to paste if they must type something you cannot run.
-- Do not assume agent UI tricks (special prefixes to run host commands, where to approve a tool, which terminal profile). Explain the path once.
+- Do not assume agent UI tricks, such as special prefixes to run host commands, where to approve a tool, or which terminal profile.
 - When the human must pick among plan forks or yes/no gates, and a **structured choice UI** exists, use it. Put the recommended option first. Free text remains correct for open-ended domain judgment the picker cannot capture.
 
-### 5. Own first-time setup
+### 5. Own first-time setup from zero
 
-Do not assume the runtime, SDK, firmware, or cloud project already exists. Detect blank vs ready. Walk first-run from zero once, then never make them re-learn it for routine updates.
+Do not assume the runtime, SDK, firmware, or cloud project already exists. Detect blank versus ready. Walk first-run from zero once, then never make them re-learn it for routine updates.
 
 ### 6. Own scary surfaces in plain language
 
