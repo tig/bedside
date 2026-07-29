@@ -52,6 +52,10 @@ Normative text lives in [`contract/`](contract/). Summary only:
 10. Teach only what tomorrow requires.
 11. Compound what you learn.
 
+## Examples
+
+
+
 ## Adoption checklist
 
 Claim "we follow Bedside" when:
