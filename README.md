@@ -54,7 +54,23 @@ Normative text lives in [`contract/`](contract/). Summary only:
 
 ## Examples
 
+### 1. Orientation before the gate
 
+Plain-language welcome, product identity, and a first-ship map. One dumb-simple next act (`ok` / `go` / Enter) before a structured start-gate chooser. Not a wall of shell. Not a free-text plan menu.
+
+![Orientation (silico Stage 0a): welcome, identity, first-ship map, then a short ok before the start-gate chooser](docs/images/example-orientation.png)
+
+### 2. Structured ask (board identity)
+
+One question, numbered choices, recommended path first. Evidence in plain language (which port answered what). Operator judgment stays with the human; the agent does not guess the board.
+
+![Structured ask: is COM7 the product board? yes / no with prior serial identity as evidence](docs/images/example-ask.png)
+
+### 3. Scary surface (flash)
+
+Where we are, why this step, what will happen, and what they may notice. Then one irreversible ask. Recommended path is **wait**, not yes. Risk lives in the choice labels.
+
+![Scary surface ask: overwrite device firmware on COM7? recommended no (wait) with plain-language risk](docs/images/example-scary-flash.png)
 
 ## Adoption checklist
 
